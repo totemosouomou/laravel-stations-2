@@ -25,6 +25,46 @@ Visual Studio Codeを使用してコードを編集し、「TechTrain Railway」
 # Station1のテストをする場合
 docker compose exec php-container vendor/bin/phpunit tests/Feature/LaravelStations/Station1
 ```
+# TechTrain Rails Railway について
+
+Railway では Git で自分が取り組んだ内容を記録するときに、自動でテストが実行されます。この際、Station の内容に即した実装になっているかを最低限のラインとして確認します。
+テストが通れば Station クリアとなります。
+クリア後、TechTrain の画面に戻り、クリアになっているかを確認してみてください。
+
+
+## バージョン情報
+
+
+|言語、フレームワークなど|バージョン|
+|:---:|:---:|
+Rails| 6.*
+Ruby| 2.7
+MySQL| 8.*
+
+## 初期設定
+
+### 必要なツール
+
+|ツール名|目安となるバージョン|
+|:---:|:---:|
+|Node.js| 14.*  [ 12.* ,  16.* では動作しません]|
+|Yarn|1.22.*|
+|Docker|20.10.*|
+|Docker Compose|1.29.*|
+
+Dockerをお使いのPCにインストールしてください。  
+バージョンが異なる場合、動作しない場合があります。  
+Node.js, Yarnのインストールがまだの場合は[html-staions](https://github.com/TechBowl-japan/html-stations)を参考にインストールしてください。  
+また、使用PCがWindowsの場合は、WSLを[この記事](https://docs.microsoft.com/ja-jp/windows/wsl/install-win10)を参考にインストールしてください。
+
+### 「必要な」インストール済みの場合
+
+次の手順で取り組み始めてください。
+
+####  `rails-stations`リポジトリのFork
+
+画面右上にあるForkより [Rails Railway](https://github.com/TechBowl-japan/rails-stations)のリポジトリを自分のアカウントにForkしてください。
+
 #### `rails-stations`リポジトリのクローン
 
 作成したリポジトリを作業するディレクトリにクローンしましょう。
