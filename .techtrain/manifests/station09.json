@@ -1,11 +1,14 @@
 {
-  "name": "Station 09",
-  "id": 9,
-  "prepare": [],
-  "tests": [
-    {
-      "type": "rspec",
-      "specFile": "./spec/station09"
-    }
-  ]
+    "name": "Station 09",
+    "id": 668,
+    "prepare": [],
+    "tests": [
+        {
+            "type": "junit-compat",
+            "command": "docker compose exec php-container vendor/bin/phpunit tests/Feature/LaravelStations/Station9 --log-junit ./test-outputs/station09.xml",
+            "args": [],
+            "shell": true,
+            "reportFile": "/test-outputs/station09.xml"
+        }
+    ]
 }
