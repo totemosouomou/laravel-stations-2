@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "app",
   "private": true,
   "dependencies": {
@@ -28,4 +29,22 @@
       "if [ -e /.dockerenv ]; then \n\n echo execute in Docker\nyarn hook:pre-commit\nelse\necho execute in local\ndocker-compose exec -T web yarn hook:pre-commit\n\nfi"
     ]
   }
+=======
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "mix",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
+        "prod": "npm run production",
+        "production": "mix --production"
+    },
+    "devDependencies": {
+        "axios": "^0.21",
+        "laravel-mix": "^6.0.6",
+        "lodash": "^4.17.19",
+        "postcss": "^8.1.14"
+    }
+>>>>>>> 0092968 (first commit)
 }

@@ -1,0 +1,14 @@
+{
+    "name": "Station 15",
+    "id": 674,
+    "prepare": [],
+    "tests": [
+        {
+            "type": "junit-compat",
+            "command": "docker compose exec php-container vendor/bin/phpunit tests/Feature/LaravelStations/Station15 --log-junit ./test-outputs/station15.xml",
+            "args": [],
+            "shell": true,
+            "reportFile": "/test-outputs/station15.xml"
+        }
+    ]
+}
