@@ -405,7 +405,7 @@ scoop install git nodejs-lts yarn
 
 ![スクリーンショット 2022-01-18 16 31 52](https://user-images.githubusercontent.com/16362021/149891200-e6da2ca6-662d-4cee-8ec6-816ef6c06b77.png)
 
-9. `docker compose php-container composer install` を打ちましょう
+9. `docker compose exec php-container composer install` を打ちましょう
 10. .env ファイル内の `APP_KEY=` の右辺が空白の場合、`docker compose exec php-container php artisan key:generate` を打ちましょう
 11. .env ファイル内の `APP_KEY=` にキーが登録されたことを確認し、`docker compose up -d` を実行します
 12. http://localhost:8888 を開いて次のような表示になっていれば環境構築は終了です！お疲れさまでした。
