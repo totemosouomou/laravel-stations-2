@@ -32,8 +32,8 @@ class AdminScheduleTest extends TestCase
             for ($j = 0; $j < 10; $j++) {
                 Schedule::insert([
                     'movie_id' => $movieId,
-                    'start_time' => CarbonImmutable::now()->addHours($j),
-                    'end_time' => CarbonImmutable::now()->addHours($j + 2),
+                    'start_time' => CarbonImmutable::createFromTime($j, 0, 0),
+                    'end_time' => CarbonImmutable::createFromTime($j + 2, 0, 0),
                 ]);
             }
         }
@@ -68,17 +68,19 @@ class AdminScheduleTest extends TestCase
 
     public function test管理者映画スケジュール作成画面でスケジュールが作成されるか(): void
     {
+        $startTime = new CarbonImmutable('2022-01-01 00:00:00');
+        $endTime = new CarbonImmutable('2022-01-01 02:00:00');
         $this->assertScheduleCount(0);
         $movieId = $this->createMovie('タイトル')->id;
         $response = $this->post('/admin/movies/'.$movieId.'/schedules/store', [
             'movie_id' => $movieId,
-            'start_time_date' => CarbonImmutable::now()->format('Y-m-d'),
-            'start_time_time' => CarbonImmutable::now()->format('H:i'),
-            'end_time_date' => CarbonImmutable::now()->addHour()->format('Y-m-d'),
-            'end_time_time' => CarbonImmutable::now()->addHour()->format('H:i'),
+            'start_time_date' => $startTime->format('Y-m-d'),
+            'start_time_time' => $startTime->format('H:i'),
+            'end_time_date' => $endTime->addHour()->format('Y-m-d'),
+            'end_time_time' => $endTime->addHour()->format('H:i'),
         ]);
         $response->assertStatus(302);
-        $this->assertDatabaseCount('schedules', 1);
+        $this->assertScheduleCount(1);
     }
 
     public function testRequiredバリデーションが設定されているか(): void
@@ -94,7 +96,7 @@ class AdminScheduleTest extends TestCase
         ]);
         $response->assertStatus(302);
         $response->assertInvalid(['movie_id', 'start_time_date', 'start_time_time', 'end_time_date', 'end_time_time']);
-        $this->assertDatabaseCount('schedules', 0);
+        $this->assertScheduleCount(0);
     }
 
     public function test日時フォーマットのバリデーションが設定されているか(): void
@@ -110,7 +112,7 @@ class AdminScheduleTest extends TestCase
         ]);
         $response->assertStatus(302);
         $response->assertInvalid(['start_time_date', 'start_time_time', 'end_time_date', 'end_time_time']);
-        $this->assertDatabaseCount('schedules', 0);
+        $this->assertScheduleCount(0);
     }
 
     /**
@@ -138,11 +140,13 @@ class AdminScheduleTest extends TestCase
 
     public function test管理者映画編スケジュール集画面が表示されているか(): void
     {
+        $startTime = new CarbonImmutable('2022-01-01 00:00:00');
+        $endTime = new CarbonImmutable('2022-01-01 02:00:00');
         $movieId = $this->createMovie('タイトル')->id;
         $scheduleId = Schedule::insertGetId([
             'movie_id' => $movieId,
-            'start_time' => CarbonImmutable::now(),
-            'end_time' => CarbonImmutable::now()->addHours(2),
+            'start_time' => $startTime,
+            'end_time' => $endTime->addHours(2),
         ]);
         $response = $this->get('/admin/schedules/'.$scheduleId.'/edit');
         $response->assertStatus(200);

@@ -5,6 +5,7 @@ namespace Tests\Feature\LaravelStations\Station17;
 use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\Schedule;
+use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,7 +20,7 @@ class ScheduleTest extends TestCase
     public function test映画詳細ページが表示される(): void
     {
         $movie = $this->createMovie();
-        $response = $this->get('/movies/'.$movie->id);
+        $response = $this->get('/movies/' . $movie->id);
         $response->assertStatus(200);
         $response->assertSeeText($movie->title);
         $response->assertSee($movie->image_url);
@@ -42,7 +43,7 @@ class ScheduleTest extends TestCase
         $this->createSchedule($movie->id);
         $movie = Movie::with('schedules')->find($movie->id);
 
-        $response = $this->get('/movies/'.$movie->id);
+        $response = $this->get('/movies/' . $movie->id);
         $response->assertStatus(200);
 
         foreach ($movie->schedules as $schedule) {
@@ -56,10 +57,10 @@ class ScheduleTest extends TestCase
         $movie = $this->createMovie();
         Schedule::insert([
             'movie_id' => $movie->id,
-            'start_time' => CarbonImmutable::now(),
-            'end_time' => CarbonImmutable::now()->addHour(),
+            'start_time' => Carbon::createFromTime(20, 00, 00),
+            'end_time' => Carbon::createFromTime(21, 00, 00),
         ]);
-        $response = $this->get('/movies/'.$movie->id);
+        $response = $this->get('/movies/' . $movie->id);
         $response->assertStatus(200);
         $response->assertSeeText('座席を予約する');
     }
@@ -67,22 +68,20 @@ class ScheduleTest extends TestCase
     public function test上映スケジュールが上映開始時刻の昇順である(): void
     {
         $movieId = $this->createMovie()->id;
-        $now = CarbonImmutable::now();
-
         $schedule1 = Schedule::create([
             'movie_id' => $movieId,
-            'start_time' => $now->addHours(10),
-            'end_time' => $now->addHours(11),
+            'start_time' => Carbon::createFromTime(20, 00, 00),
+            'end_time' => Carbon::createFromTime(21, 00, 00),
         ]);
         $schedule2 = Schedule::create([
             'movie_id' => $movieId,
-            'start_time' => $now->addHours(3),
-            'end_time' => $now->addHours(4),
+            'start_time' => Carbon::createFromTime(10, 00, 00),
+            'end_time' => Carbon::createFromTime(11, 00, 00),
         ]);
         $schedule3 = Schedule::create([
             'movie_id' => $movieId,
-            'start_time' => $now->addHours(8),
-            'end_time' => $now->addHours(9),
+            'start_time' => Carbon::createFromTime(13, 00, 00),
+            'end_time' => Carbon::createFromTime(14, 00, 00),
         ]);
 
         $response = $this->get('/movies/' . $movieId);
@@ -113,8 +112,8 @@ class ScheduleTest extends TestCase
         for ($i = 0; $i < $count; $i++) {
             Schedule::insert([
                 'movie_id' => $movieId,
-                'start_time' => CarbonImmutable::now()->addHours($i),
-                'end_time' => CarbonImmutable::now()->addHours($i + 2),
+                'start_time' => CarbonImmutable::createFromTime($i, 0, 0),
+                'end_time' => CarbonImmutable::createFromTime($i + 2, 0, 0),
             ]);
         }
     }
