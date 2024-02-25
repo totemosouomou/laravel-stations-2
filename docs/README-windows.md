@@ -23,19 +23,32 @@ Visual Studio CodeにTechTrain Railwayのクリア条件を判定するツール
 4. GitHubリポジトリのフォークとダウンロード
     1. GitHubリポジトリのフォーク
         [TechBowl-japan/laravel-stations-2 | GitHub](https://github.com/TechBowl-japan/laravel-stations-2) にアクセスし、右上の"Fork"ボタンをクリックして、リポジトリを自分のGitHubアカウントにフォークします。
+        ![GitHubリポジトリのフォーク](./images/fork-repository.gif)
     2. GitHubリポジトリのダウンロード
-        フォークが完了したら、自分のGitHubアカウント上でフォークされたリポジトリを選択し、"Code"ボタンをクリックして、リポジトリのURLをコピーします。そして、ターミナルを開いて以下のコマンドを実行してリポジトリをダウンロードします．
-        ```bash
+        フォークが完了したら、自分のGitHubアカウント上でフォークされたリポジトリを選択し、"Code"ボタンをクリックして、リポジトリのURLをコピーします。  
+        そして、PowerShellを開いて以下のコマンドを実行してリポジトリをダウンロードします．
+        ```powershell
         git clone https://github.com/{{あなたのGitHubID}}/laravel-stations-2.git
         ```
-5. Visual Studio Codeでダウンロードしたリポジトリを開く
-    ターミナルでリポジトリをダウンロードしたら、Visual Studio Codeを起動し、ファイル -> フォルダを開くを選択して、ダウンロードしたリポジトリのディレクトリを選択します。
-6. Dockerコマンドでコンテナを起動
+5. Visual Studio Codeでダウンロードしたリポジトリを開く  
+    ターミナルでリポジトリをダウンロードしたら、Visual Studio Codeを起動し、左上のファイル -> フォルダを開くを選択して、ダウンロードしたリポジトリのディレクトリを選択します。
+6. Visual Studio Codeからターミナルを起動し環境構築する  
+    左上のターミナル -> 新しいターミナルを選択して、ターミナルを起動します。  
+    `cp .env.example .env` を実行し、必要な環境の情報が書かれた `.env` ファイルを作成します。  
+    `docker compose build --no-cache` を実行します。  
+7. Dockerコマンドでコンテナを起動  
     ターミナルでリポジトリのディレクトリに移動し、以下のコマンドを実行してDockerコンテナを起動します。
-    ```bash
+    ```powershell
     docker compose up -d
     ```
-7. [http://localhost:8888](http://localhost:8888) にアクセスする
+8. Dockerコマンドでコンテナを起動を確認  
+    手順7.で起動したDockerコンテナのプロセスについて確認をします。  
+    `docker compose ps` コマンドを実行してプロセスか確認してください。
+9. Laravelに必要なライブラリをインストール  
+    `docker compose exec php-contianer composer install` を実行し、ライブラリをインストールします。
+10. .env ファイル内の `APP_KEY=` の右辺が空白の場合、`docker compose exec php-container php artisan key:generate` を実行します
+11. .env ファイル内の `APP_KEY=` にキーが登録されたことを確認し、`docker compose up -d` を実行します
+12. [http://localhost:8888](http://localhost:8888) にアクセスする
 
 以上で問題解決のための環境が整いました。  
 Visual Studio Codeを使用してコードを編集し、「TechTrain Railway」という拡張機能から「できた!」と書かれた青いボタンをクリックすると判定が始まります．
