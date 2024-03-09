@@ -32,8 +32,13 @@ TechTrain Railway の問題を解くために必要な下記ツールのイン�
         git clone https://github.com/{{あなたのGitHubID}}/laravel-stations-2.git
         ```
 5. Visual Studio Codeでダウンロードしたリポジトリを開く
-    - ターミナルでリポジトリをダウンロードしたら、Visual Studio Codeを起動し、ファイル -> フォルダを開くを選択して、ダウンロードしたリポジトリのディレクトリを選択します。
-6. Visual Studio Codeからターミナルを起動し環境構築する  
+    - リポジトリをダウンロードしたディレクトリで右クリックし、"Open with Code"または"Visual Studio Code で開く"を選択します。
+    - または、コマンドラインで以下のコマンドを実行して、リポジトリのディレクトリをVisual Studio Codeで開きます。
+    ```bash
+    code ダウンロードしたリポジトリのディレクトリ
+    ```
+    - Visual Studio Codeが起動したら、左上のファイル -> フォルダを開くを選択して、ダウンロードしたリポジトリのディレクトリを選択します。
+6. Visual Studio Codeからターミナルを起動し環境構築する
     - 左上のターミナル -> 新しいターミナルを選択して、ターミナルを起動します。  
     - 以下のコマンドを実行し、アプリケーションの環境固有の設定や機密情報を格納する `.env` ファイルを作成します。
     ```bash
@@ -59,7 +64,7 @@ TechTrain Railway の問題を解くために必要な下記ツールのイン�
 9. Laravelに必要なライブラリをインストール  
     - 以下のコマンドを実行し、ライブラリをインストールします。
     ```bash
-    docker compose exec php-contianer composer install
+    docker compose exec php-container composer install
     ```
 10. .envファイルの確認
     - .env ファイル内の `APP_KEY=` の右辺が空白の場合、下記のコマンドを実行しLaravel アプリケーションのセキュリティに関するキーを生成します。
