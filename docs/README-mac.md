@@ -86,34 +86,34 @@ Visual Studio Codeを使用してコードを編集し、「TechTrain Railway」
 
 # 環境構築
 
-## このドキュメントを見てわかること
+## 概要
 
-TechTrain Railwayの問題を解くためにDockerとVisual Studio CodeとGitが必要です。  
-そのため、自身のPC環境にDockerとVisual Studio CodeとGitのインストールをします。  
-Visual Studio CodeにTechTrain Railwayのクリア条件を判定するツールをインストールします。  
-次に、GitHubのリポジトリをフォークし、自身のPC環境にコードをダウンロードします。  
-最後に、Dockerに関するコマンドを実行し、環境構築を行います。
+TechTrain Railway の問題を解くために必要な下記ツールのインストール方法と環境構築の手順を解説します。
+- Docker
+- Visual Studio Code
+- Git
 
-### 環境構築について
+## 手順
 
 1. Docker Desktopのインストール
-    自身のMacに搭載されているCPUを確認し、[Install Docker Desktop on Mac](https://docs.docker.com/desktop/install/mac-install/) からDocker Desktopをダウンロードし、インストールします。  
-    Docker Desktopをインストールした後、一度PCを再起動してからDocker Desktopを起動してください。  
-    これにより、Dockerが正しく動作するか確認できます。
+    - 自身のMacに搭載されているCPUを確認し、[Install Docker Desktop on Mac](https://docs.docker.com/desktop/install/mac-install/) からDocker Desktopをダウンロードし、インストールします。  
+    - Docker Desktopをインストールした後、一度PCを再起動してからDocker Desktopを起動してください。  
+    - これにより、Dockerが正しく動作するか確認できます。
 2. Visual Studio Codeのインストール  
-    [Visual Studio Code](https://code.visualstudio.com/) から自分のOSに適したVisual Studio Codeをダウンロードする。
+    - [Visual Studio Code](https://code.visualstudio.com/) から自分のOSに適したVisual Studio Codeをダウンロードします。
 3. Visual Studio CodeにTechTrain Railwayのクリア条件を判定するツールをインストール  
-    Visual Studio Codeを開き、拡張機能（Extensions）から「TechTrain Railway」という拡張機能を検索してインストールします。これにより、Railwayのクリア条件を簡単に判定できるようになります。
+    - Visual Studio Codeを開き、拡張機能（Extensions）から「TechTrain Railway」という拡張機能を検索してインストールします。これにより、Railwayのクリア条件を簡単に判定できるようになります。
     ![TechTrain Railwayの拡張機能をインストール](./images/install-extensions.gif)
 4. GitHubリポジトリのフォークとダウンロード
     1. GitHubリポジトリのフォーク
-        [TechBowl-japan/laravel-stations-2 | GitHub](https://github.com/TechBowl-japan/laravel-stations-2) にアクセスし、右上の"Fork"ボタンをクリックして、リポジトリを自分のGitHubアカウントにフォークします。
+        - [TechBowl-japan/laravel-stations-2 | GitHub](https://github.com/TechBowl-japan/laravel-stations-2) にアクセスし、右上の"Fork"ボタンをクリックして、リポジトリを自分のGitHubアカウントにフォークします。
         ![GitHubリポジトリのフォーク](./images/fork-repository.gif)
     2. Gitのインストール  
-        GitHubからリポジトリをクローンするためには、Gitが必要です。  
-        インストールされていない場合は、[Gitの公式サイト](https://git-scm.com/download/mac) で提示された選択肢から1つ選び、ダウンロードします。
+        - GitHubからリポジトリをクローンするためには、Gitが必要です。  
+        - インストールされていない場合は、[Gitの公式サイト](https://git-scm.com/download/mac) で提示された選択肢から1つ選び、ダウンロードします。
     3. GitHubリポジトリのダウンロード
-        フォークが完了したら、自分のGitHubアカウント上でフォークされたリポジトリを選択し、"Code"ボタンをクリックして、リポジトリのURLをコピーします。そして、ターミナルを開いて以下のコマンドを実行してリポジトリをダウンロードします。
+        - フォークが完了したら、自分のGitHubアカウント上でフォークされたリポジトリを選択し、"Code"ボタンをクリックして、リポジトリのURLをコピーします。
+        - そして、ターミナルを開いて以下のコマンドを実行してリポジトリをダウンロードします。
         ```bash
         git clone https://github.com/{{あなたのGitHubID}}/laravel-stations-2.git
         ```
@@ -125,7 +125,7 @@ Visual Studio CodeにTechTrain Railwayのクリア条件を判定するツール
     `docker compose build --no-cache` を実行します。  
     ※ Dockerコンテナのビルドおよび起動には時間がかかる場合があります。コマンドが正常に完了するまで待ってください。
 7. Dockerコマンドでコンテナを起動  
-    ターミナルでリポジトリのディレクトリに移動し、以下のコマンドを実行してDockerコンテナを起動します。
+    - ターミナルでリポジトリのディレクトリに移動し、以下のコマンドを実行してDockerコンテナを起動します。
     ```bash
     docker compose up -d
     ```
@@ -140,8 +140,8 @@ Visual Studio CodeにTechTrain Railwayのクリア条件を判定するツール
 11. .env ファイル内の `APP_KEY=` にキーが登録されたことを確認し、`docker compose up -d` を実行します。
 12. [http://localhost:8888](http://localhost:8888) にアクセスする。
 13. 環境構築完了後の確認  
-    環境構築が正常に終了したことを確認するために、Visual Studio Codeでリポジトリを開いてから、ファイルの変更や追加ができるか確認してください。  
-    また、TechTrain Railwayの拡張機能が正しく機能しているかも確認してください。
+    - 環境構築が正常に終了したことを確認するために、Visual Studio Codeでリポジトリを開いてから、ファイルの変更や追加ができるか確認してください。  
+    - また、TechTrain Railwayの拡張機能が正しく機能しているかも確認してください。
 
 以上で問題解決のための環境が整いました。  
 Visual Studio Codeを使用してコードを編集し、「TechTrain Railway」という拡張機能から「できた!」と書かれた青いボタンをクリックすると判定が始まります。
