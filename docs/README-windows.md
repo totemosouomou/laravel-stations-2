@@ -30,7 +30,7 @@ TechTrain Railway の問題を解くために必要な下記ツールのイン�
     3. GitHubリポジトリのダウンロード
         - フォークが完了したら、自分のGitHubアカウント上でフォークされたリポジトリを選択し、"Code"ボタンをクリックして、リポジトリのURLをコピーします。  
         - そして、PowerShellを開いて以下のコマンドを実行してリポジトリをダウンロードします。
-        ```powershell
+        ```bash
         git clone https://github.com/{{あなたのGitHubID}}/laravel-stations-2.git
         ```
 5. Visual Studio Codeでダウンロードしたリポジトリを開く
@@ -38,38 +38,38 @@ TechTrain Railway の問題を解くために必要な下記ツールのイン�
 6. Visual Studio Codeからターミナルを起動し環境構築する
     - 左上のターミナル -> 新しいターミナルを選択して、ターミナルを起動します。  
     - 以下のコマンドを実行し、アプリケーションの環境固有の設定や機密情報を格納する `.env` ファイルを作成します。
-    ```powershell
+    ```bash
     cp .env.example .env
     ```
     - 以下のコマンドを実行し、Dockerコンテナのビルドを行います。
-    ```powershell
+    ```bash
     docker compose build --no-cache
     ```  
         - ※ Dockerコンテナのビルドおよび起動には時間がかかる場合があります。コマンドが正常に完了するまで待ってください。
 7. Dockerコマンドでコンテナを起動
     - ターミナルでリポジトリのディレクトリに移動し、以下のコマンドを実行してDockerコンテナを起動します。
-    ```powershell
+    ```bash
     docker compose up -d
     ```
         - ※ Dockerコンテナのビルドおよび起動には時間がかかる場合があります。コマンドが正常に完了するまで待ってください。
 8. Dockerコマンドでコンテナを起動を確認
     - 以下のコマンドを実行し、手順7.で起動したDockerコンテナのプロセスが起動しているかを確認してください。
-    ```powershell
+    ```bash
     docker compose ps
     ```
         - ※ Dockerが使用するポートが他のアプリケーションと競合していないか確認してください。
 9. Laravelに必要なライブラリをインストール  
     - 以下のコマンドを実行し、ライブラリをインストールします。
-    ```powershell
+    ```bash
     docker compose exec php-contianer composer install
     ```
 10. .envファイルの確認
     - .env ファイル内の `APP_KEY=` の右辺が空白の場合、下記のコマンドを実行しLaravel アプリケーションのセキュリティに関するキーを生成します。
-    ```powershell
+    ```bash
     docker compose exec php-container php artisan key:generate
     ```
     - .env ファイル内の `APP_KEY=` にキーが登録されたことを確認し、以下のコマンドを実行します。
-    ```
+    ```bash
     docker compose up -d
     ```
 12. ローカルサーバが立ち上がっていることを確認
