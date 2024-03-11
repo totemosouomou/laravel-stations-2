@@ -307,7 +307,7 @@ git clone https://github.com/{GitHubのユーザー名}/rails-stations.git
 
 ### テスト実行の仕方
 
-上記の環境構築にて、Laravel Railwayに取り組むための環境が整いました。
+必ず上記の環境構築にて、Laravel Railwayに取り組むための環境を整えてください。
 
 Visual Studio Codeを使用してコードを編集し、「TechTrain Railway」という拡張機能から「できた!」と書かれた青いボタンをクリックすると判定が始まります。
 
