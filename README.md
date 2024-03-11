@@ -305,7 +305,7 @@ git clone https://github.com/{GitHubのユーザー名}/rails-stations.git
 
 [Windowsにおける環境構築について](./docs/README-windows.md) を参照ください。
 
-### テスト実行の仕方
+# テスト実行の仕方
 
 必ず上記の環境構築にて、Laravel Railwayに取り組むための環境を整えてください。
 
