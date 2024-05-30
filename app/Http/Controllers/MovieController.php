@@ -17,4 +17,15 @@ class MovieController extends Controller
         $movies = Movie::all();
         return view('index', ['movies' => $movies]);
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function admin()
+    {
+        $movies = Movie::all();
+        return view('admin', ['movies' => $movies]);
+    }
 }
