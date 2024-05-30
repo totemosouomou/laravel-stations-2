@@ -35,6 +35,11 @@
                     <td>{{ $movie->updated_at }}</td>
                     <td>
                         <a href="{{ url('/admin/movies/' . $movie->id . '/edit') }}">編集</a>
+                        <form action="{{ url('/admin/movies/' . $movie->id . '/destroy') }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach
