@@ -18,7 +18,8 @@ class MovieFactory extends Factory
             'title' => $this->faker->unique()->word, // 一意の単語を生成
             'image_url' => $this->faker->imageUrl(), // ランダムな画像URLを生成
             'published_year' => $this->faker->numberBetween(2000, 2024), // 2000年から2024年までのランダムな整数
-            'is_showing' => $this->faker->boolean() // true または false のランダムな値
+            'is_showing' => $this->faker->boolean(), // true または false のランダムな値
+            'description' => $this->faker->text(), // description をランダムなテキストで設定
         ];
     }
 }
