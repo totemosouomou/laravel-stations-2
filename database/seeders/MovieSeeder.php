@@ -15,7 +15,9 @@ class MovieFactory extends Factory
     {
         return [
             'title' => $this->faker->realText(10),
-            'image_url' => $this->faker->imageUrl() // imageUrl()を使用してランダムな画像URLを生成する
+            'image_url' => $this->faker->imageUrl(), // imageUrl()を使用してランダムな画像URLを生成する
+            'published_year' => $this->faker->numberBetween(2000, 2024), // 2000年から2024年までのランダムな整数
+            'is_showing' => $this->faker->boolean() // true または false のランダムな値
         ];
     }
 }
