@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Practice;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PracticeFactory extends Factory
+class MovieFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,6 +15,7 @@ class PracticeFactory extends Factory
     {
         return [
             'title' => $this->faker->realText(10),
+            'image_url' => $this->faker->imageUrl() // imageUrl()を使用してランダムな画像URLを生成する
         ];
     }
 }
