@@ -19,6 +19,7 @@
                 <th>概要</th>
                 <th>登録日時</th>
                 <th>更新日時</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,9 @@
                     <td>{{ $movie->description }}</td>
                     <td>{{ $movie->created_at }}</td>
                     <td>{{ $movie->updated_at }}</td>
+                    <td>
+                        <a href="{{ url('/admin/movies/' . $movie->id . '/edit') }}">編集</a>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

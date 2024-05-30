@@ -39,24 +39,57 @@ class MovieController extends Controller
         return view('create');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $movie = Movie::findOrFail($id);
+        return view('edit', ['movie' => $movie]);
+    }
+
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255|unique:movies,title',
+        $validated = $request->validate([
+            'title' => 'required|string|max:255|unique:movies,title,' . $request->id,
             'image_url' => 'required|url',
             'published_year' => 'required|integer|between:2000,2025',
-            'is_showing' => 'boolean',
             'description' => 'required|string',
+            'is_showing' => 'boolean',
         ]);
 
         Movie::create([
-            'title' => $request->title,
-            'image_url' => $request->image_url,
-            'published_year' => $request->published_year,
+            'title' => $validated['title'],
+            'image_url' => $validated['image_url'],
+            'published_year' => $validated['published_year'],
+            'description' => $validated['description'],
             'is_showing' => $request->has('is_showing'),
-            'description' => $request->description,
         ]);
 
         return redirect()->back()->with('status', '映画が登録されました！');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255|unique:movies,title,' . $request->id,
+            'image_url' => 'required|url',
+            'published_year' => 'required|integer|between:2000,2025',
+            'description' => 'required|string',
+            'is_showing' => 'boolean',
+        ]);
+
+        $movie = Movie::findOrFail($id);
+        $movie->update([
+            'title' => $validated['title'],
+            'image_url' => $validated['image_url'],
+            'published_year' => $validated['published_year'],
+            'description' => $validated['description'],
+            'is_showing' => $request->has('is_showing'),
+        ]);
+
+        return redirect('/admin/movies/' . $id . '/edit')->with('status', '映画が更新されました！');
     }
 }
