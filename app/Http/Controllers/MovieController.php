@@ -92,4 +92,12 @@ class MovieController extends Controller
 
         return redirect('/admin/movies/' . $id . '/edit')->with('status', '映画が更新されました！');
     }
+
+    public function destroy($id)
+    {
+        $movie = Movie::findOrFail($id);
+        $movie->delete();
+
+        return redirect('/admin/movies')->with('success', '映画が削除されました');
+    }
 }
