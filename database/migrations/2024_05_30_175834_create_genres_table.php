@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMoviesTable extends Migration
+class CreateGenresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateMoviesTable extends Migration
      */
     public function up()
     {
-        Schema::create('movies', function (Blueprint $table) {
+        //
+        Schema::create('genres', function (Blueprint $table) {
             $table->id();
-            $table->string('title',255)->unique(); // 映画タイトル（ユニーク制約）
-            $table->text('image_url'); // 画像URL
+            $table->string('name')->unique(); // ジャンル名（ユニーク制約）
             $table->timestamps();
         });
     }
@@ -28,6 +28,7 @@ class CreateMoviesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('movies');
+        //
+        Schema::dropIfExists('genres');
     }
 }
