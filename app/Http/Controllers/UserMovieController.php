@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Movie;
+use App\Models\Schedule;
 use App\Models\Sheet;
 
 class UserMovieController extends Controller
@@ -44,6 +46,23 @@ class UserMovieController extends Controller
 
         // ビューに渡す
         return view('index', ['movies' => $movies]);
+    }
+
+    public function schedule($id)
+    {
+        $movie = Movie::with('schedules')->findOrFail($id);
+        $schedules = Schedule::with('movie')
+        ->where('movie_id', $movie->id)
+        ->orderBy('start_time', 'asc')
+        ->get();
+
+        // modelsへ移動
+        // foreach ($schedules as $schedule) {
+        //     $schedule->start_time = Carbon::parse($schedule->start_time)->format('H:i');
+        //     $schedule->end_time = Carbon::parse($schedule->end_time)->format('H:i');
+        // }
+
+        return view('schedule', ['movie' => $movie, 'schedules' => $schedules]);
     }
 
     public function sheets()
