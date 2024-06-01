@@ -1,38 +1,3 @@
-<<<<<<< HEAD
-version: '3'
-services:
-  db:
-    build:
-      context: ./infra/db
-      dockerfile: Dockerfile
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_DATABASE: app_test
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user
-    ports:
-      - "3306:3306"
-    volumes:
-      - rails-railway-stations-volume:/var/lib/mysql
-
-  web:
-    build:
-      context: .
-      dockerfile: ./infra/web/Dockerfile
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    volumes:
-      - .:/app
-      - bundle:/usr/local/bundle
-    ports:
-      - "3000:3000"
-    links:
-      - db
-
-volumes:
-  rails-railway-stations-volume:
-  bundle:
-=======
 version: "3.9"
 volumes:
     laravel-railway-mysql-data:
@@ -126,4 +91,3 @@ services:
         environment:
             ADMINER_DEFAULT_SERVER: mysql-container
             ADMINER_DESIGN: galkaev
->>>>>>> 0092968 (first commit)
