@@ -31,6 +31,7 @@
         <div>
             <h2>{{ $movie->title }}</h2>
             <img src="{{ $movie->image_url }}" alt="{{ $movie->title }}">
+            <a href="{{ url('/movies/' . $movie->id) }}">詳細・上映時間</a>
         </div>
     @endforeach
 
