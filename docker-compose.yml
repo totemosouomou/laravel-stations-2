@@ -219,4 +219,3 @@ services:
         environment:
             ADMINER_DEFAULT_SERVER: mysql-container
             ADMINER_DESIGN: galkaev
->>>>>>> 0092968 (first commit)
