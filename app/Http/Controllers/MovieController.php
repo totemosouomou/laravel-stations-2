@@ -26,6 +26,30 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function detail($id)
+    {
+        // 指定されたIDの映画を取得
+        $movie = Movie::with('schedules')->findOrFail($id);
+        // $movie = Movie::with('genre', 'schedules')->findOrFail($id);
+
+        // ジャンル情報がない場合は新しい Genre インスタンスを設定
+        // if (!$movie->genre) {
+        //     $movie->genre = new Genre();
+        // }
+
+        // スケジュール情報がない場合は新しい Schedule インスタンスを設定
+        if (!$movie->schedules) {
+            $movie->schedules = new Schedule();
+        }
+
+        return view('admin.detail', ['movie' => $movie]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         return view('admin.create');
@@ -44,8 +68,9 @@ class MovieController extends Controller
         return view('admin.edit', ['movie' => $movie]);
     }
 
-    public function store(Request $request) {
-
+    public function store(Request $request)
+    {
+        // バリデーション
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|unique:movies',
             'image_url' => 'required|url',
@@ -116,6 +141,7 @@ class MovieController extends Controller
             $movie->genre = new Genre();
         }
 
+        // バリデーション
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|unique:movies,title,' . $id,
             'image_url' => 'required|url',

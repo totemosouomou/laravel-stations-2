@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Practice;
 use App\Models\Movie;
 use App\Models\Sheet;
 use App\Models\Schedule;

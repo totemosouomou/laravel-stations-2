@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\UserMovieController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\MovieController;
 
 /*
@@ -16,32 +17,28 @@ use App\Http\Controllers\MovieController;
 |
 */
 
-Route::get('/practice', [PracticeController::class, 'sample']);
-Route::get('/practice2', [PracticeController::class, 'sample2']);
-Route::get('/practice3', [PracticeController::class, 'sample3']);
-Route::get('/getPractice', [PracticeController::class, 'getPractice']);
+// ユーザー向け映画関連のルート
+Route::get('/movies', [UserMovieController::class, 'index'])->name('user.movies.index');
+Route::get('/movies/{id}', [UserMovieController::class, 'Schedules'])->name('user.movies.Schedules');
+Route::get('/sheets', [UserMovieController::class, 'sheets'])->name('user.movies.sheets');
 
-Route::get('/movies', [UserMovieController::class, 'index']);
-Route::get('/movies/{id}', [UserMovieController::class, 'Schedule']);
-Route::get('/sheets', [UserMovieController::class, 'sheets']);
-
-Route::get('/admin/movies', [MovieController::class, 'admin']);
-Route::get('/admin/movies/create', [MovieController::class, 'create']);
-Route::post('/admin/movies/store', [MovieController::class, 'store']);
+// 管理者向け映画関連のルート
+Route::get('/admin/movies', [MovieController::class, 'admin'])->name('admin.movies.index');
+Route::get('/admin/movies/create', [MovieController::class, 'create'])->name('admin.movies.create');
+Route::post('/admin/movies/store', [MovieController::class, 'store'])->name('admin.movies.store');
+Route::get('/admin/movies/{id}', [MovieController::class, 'detail'])->name('admin.movies.detail');
 Route::get('/admin/movies/{id}/edit', [MovieController::class, 'edit'])->name('admin.movies.edit');
 Route::patch('/admin/movies/{id}/update', [MovieController::class, 'update'])->name('admin.movies.update');
-Route::delete('/admin/movies/{id}/destroy', [MovieController::class, 'destroy']);
+Route::delete('/admin/movies/{id}/destroy', [MovieController::class, 'destroy'])->name('admin.movies.destroy');
 
-Route::get('/movies', [UserMovieController::class, 'index']);
-Route::get('/movies/{id}', [UserMovieController::class, 'Schedule']);
-Route::get('/sheets', [UserMovieController::class, 'sheets']);
-
-Route::get('/admin/movies', [MovieController::class, 'admin']);
-Route::get('/admin/movies/create', [MovieController::class, 'create']);
-Route::post('/admin/movies/store', [MovieController::class, 'store']);
-Route::get('/admin/movies/{id}/edit', [MovieController::class, 'edit'])->name('admin.movies.edit');
-Route::patch('/admin/movies/{id}/update', [MovieController::class, 'update'])->name('admin.movies.update');
-Route::delete('/admin/movies/{id}/destroy', [MovieController::class, 'destroy']);
+// 管理者向けスケジュール関連のルート
+Route::get('/admin/schedules', [ScheduleController::class, 'admin'])->name('admin.schedules.index');
+Route::get('/admin/movies/{id}/schedules/create', [ScheduleController::class, 'create'])->name('admin.movies.schedules.create');
+Route::post('/admin/movies/{id}/schedules/store', [ScheduleController::class, 'store'])->name('admin.movies.schedules.store');
+Route::get('/admin/schedules/{scheduleId}', [ScheduleController::class, 'detail'])->name('admin.schedules.detail');
+Route::get('/admin/schedules/{scheduleId}/edit', [ScheduleController::class, 'edit'])->name('admin.schedules.edit');
+Route::patch('/admin/schedules/{scheduleId}/update', [ScheduleController::class, 'update'])->name('admin.schedules.update');
+Route::delete('/admin/schedules/{scheduleId}/destroy', [ScheduleController::class, 'destroy'])->name('admin.schedules.destroy');
 
 Route::get('/', function () {
     return view('welcome');

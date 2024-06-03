@@ -18,13 +18,19 @@ class Schedule extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'start_time',
-        'end_time',
+    ];
+
+    protected $casts = [
+        'start_time' => 'datetime',
+        'start_time_date' => 'datetime',
+        'start_time_time' => 'datetime',
+        'end_time' => 'datetime',
+        'end_time_date' => 'datetime',
+        'end_time_time' => 'datetime',
     ];
 
     public function movie()
     {
         return $this->belongsTo(Movie::class);
     }
-
 }

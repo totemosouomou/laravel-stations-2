@@ -48,7 +48,7 @@ class UserMovieController extends Controller
         return view('index', ['movies' => $movies]);
     }
 
-    public function schedule($id)
+    public function schedules($id)
     {
         $movie = Movie::with('schedules')->findOrFail($id);
         $schedules = Schedule::with('movie')
@@ -62,7 +62,7 @@ class UserMovieController extends Controller
         //     $schedule->end_time = Carbon::parse($schedule->end_time)->format('H:i');
         // }
 
-        return view('schedule', ['movie' => $movie, 'schedules' => $schedules]);
+        return view('schedules', ['movie' => $movie, 'schedules' => $schedules]);
     }
 
     public function sheets()

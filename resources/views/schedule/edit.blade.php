@@ -1,55 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>スケジュール編集</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>編集</title>
 </head>
 <body>
-    <h2>スケジュール編集 - 映画ID: {{ $schedule->movie->id }}</h2>
+    <h1>スケジュール更新</h1>
 
-    @if ($errors->any())
-        <div>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    @if (session('status'))
-        <div>
-            {{ session('status') }}
-        </div>
-    @endif
-
-    @if (session('success'))
-        <div>{{ session('success') }}</div>
-    @endif
-
-    <form action="{{ url('/admin/schedules/' . $schedule->id . '/update') }}" method="post">
+    <form method="post" action="{{ route('admin.schedules.update', ['scheduleId' => $schedule->id]) }}" >
+        @foreach ($errors->all() as $error)
+        {{$error}}<br>
+        @endforeach
+        @if (session('time_error'))
+        {{ session('time_error') }}<br>
+        @endif
         @csrf
-        @method('patch')
-        <input type="hidden" name="movie_id" value="{{ $schedule->movie->id }}">
+        @method('PATCH')
 
-        <div>
-            <label for="start_time_date">開始日付:</label>
-            <input type="date" id="start_time_date" name="start_time_date" value="{{ $schedule->start_time->format('Y-m-d') }}" required>
-        </div>
+        <input type="hidden" id="movie_id" name="movie_id" value="{{ $schedule->movie_id }}">
 
-        <div>
-            <label for="start_time_time">開始時間:</label>
-            <input type="time" id="start_time_time" name="start_time_time" value="{{ $schedule->start_time->format('H:i') }}" required>
-        </div>
+        <label for="start_time_date">開始日:</label>
+        <input type="date" id="start_time_date" name="start_time_date" value="{{ $schedule->start_time->format('Y-m-d') }}">
+        <label for="start_time_time">開始時間:</label>
+        <input type="time" id="start_time_time" name="start_time_time" value="{{ $schedule->start_time->format('H:i') }}">
 
-        <div>
-            <label for="end_time_date">終了日付:</label>
-            <input type="date" id="end_time_date" name="end_time_date" value="{{ $schedule->end_time->format('Y-m-d') }}" required>
-        </div>
-
-        <div>
-            <label for="end_time_time">終了時間:</label>
-            <input type="time" id="end_time_time" name="end_time_time" value="{{ $schedule->end_time->format('H:i') }}" required>
-        </div>
+        <label for="end_time_date">終了日:</label>
+        <input type="date" id="end_time_date" name="end_time_date" value="{{ $schedule->end_time->format('Y-m-d') }}">
+        <label for="end_time_time">終了時間:</label>
+        <input type="time" id="end_time_time" name="end_time_time" value="{{ $schedule->end_time->format('H:i') }}">
 
         <button type="submit">更新</button>
     </form>

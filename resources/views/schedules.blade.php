@@ -13,17 +13,17 @@
 
     <h2>上映スケジュール</h2>
     <ul>
-      @if (count($schedules) === 0)
-          <span>本日の上映はありません。</span>
-      @else
-        @foreach($schedules as $schedule)
-            <li>
-                <span>{{ $schedule->movie->title }}</span>
-                <span>開始時間: {{ $schedule->start_time->format('H:i') }}</span> -
-                <span>{{ $schedule->end_time->format('H:i') }}</span>
-            </li>
-        @endforeach
-      @endif
+        @if (count($schedules) === 0)
+            <span>本日の上映はありません。</span>
+        @else
+            @foreach($schedules as $schedule)
+                <li>
+                    <span>{{ $schedule->movie->title }}</span>
+                    <span>開始時間: {{ $schedule->start_time->format('H:i') }}</span> -
+                    <span>{{ $schedule->end_time->format('H:i') }}</span>
+                </li>
+            @endforeach
+        @endif
     </ul>
     <a href="{{ url('/movies') }}">映画一覧に戻る</a>
 </body>
