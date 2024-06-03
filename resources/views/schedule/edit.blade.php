@@ -9,15 +9,29 @@
 <body>
     <h1>スケジュール更新</h1>
 
+    @if ($errors->any())
+        <div>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if (session('status'))
+        <div>
+            {{ session('status') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div>{{ session('success') }}</div>
+    @endif
+
     <form method="post" action="{{ route('admin.schedules.update', ['scheduleId' => $schedule->id]) }}" >
-        @foreach ($errors->all() as $error)
-        {{$error}}<br>
-        @endforeach
-        @if (session('time_error'))
-        {{ session('time_error') }}<br>
-        @endif
         @csrf
-        @method('PATCH')
+        @method('patch')
 
         <input type="hidden" id="movie_id" name="movie_id" value="{{ $schedule->movie_id }}">
 

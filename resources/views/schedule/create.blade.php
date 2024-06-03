@@ -6,6 +6,26 @@
 <body>
     <h2>スケジュールを追加 - 映画ID: {{ $movie->id }}</h2>
 
+    @if ($errors->any())
+        <div>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if (session('status'))
+        <div>
+            {{ session('status') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div>{{ session('success') }}</div>
+    @endif
+
     <form action="{{ url('/admin/movies/' . $movie->id . '/schedules/store') }}" method="post">
         @csrf
         <input type="hidden" name="movie_id" value="{{ $movie->id }}">
