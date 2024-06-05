@@ -17,8 +17,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // シートデータをシードする
+        $this->call(SheetTableSeeder::class);
+
+        // 映画データをシードする
         Movie::factory(10)->create();
-        $this->call(SheetsTableSeeder::class);
+
+        // スケジュールdデータをシードする
         $this->call(SchedulesTableSeeder::class);
     }
 }

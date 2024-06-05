@@ -18,4 +18,9 @@ class Sheet extends Model
         'column',
         'row'
     ];
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }

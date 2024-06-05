@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\UserMovieController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\MovieController;
 
@@ -19,8 +19,13 @@ use App\Http\Controllers\MovieController;
 
 // ユーザー向け映画関連のルート
 Route::get('/movies', [UserMovieController::class, 'index'])->name('user.movies.index');
-Route::get('/movies/{id}', [UserMovieController::class, 'Schedules'])->name('user.movies.Schedules');
+Route::get('/movies/{id}', [UserMovieController::class, 'schedules'])->name('user.movies.schedules');
 Route::get('/sheets', [UserMovieController::class, 'sheets'])->name('user.movies.sheets');
+
+// ユーザー向け座席予約関連のルート
+Route::get('/movies/{id}/schedules/{scheduleId}/sheets', [ReservationController::class, 'sheets'])->name('user.movies.schedules.sheets');
+Route::get('/movies/{id}/schedules/{scheduleId}/reservations/create', [ReservationController::class, 'create'])->name('user.reservations.create');
+Route::post('/reservations/store', [ReservationController::class, 'store'])->name('user.reservations.store');
 
 // 管理者向け映画関連のルート
 Route::get('/admin/movies', [MovieController::class, 'admin'])->name('admin.movies.index');

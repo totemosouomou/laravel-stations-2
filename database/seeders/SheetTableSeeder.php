@@ -14,6 +14,9 @@ class SheetTableSeeder extends Seeder
      */
     public function run()
     {
+        // シーディング前にテーブルをクリアする
+        DB::table('sheets')->delete();
+
         $seeds = [
             ['id' => 1, 'column' => 1, 'row' => 'a'],
             ['id' => 2, 'column' => 2, 'row' => 'a'],

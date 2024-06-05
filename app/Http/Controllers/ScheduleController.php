@@ -121,7 +121,7 @@ class ScheduleController extends Controller
         // スケジュールを作成
         $schedule = Schedule::create($scheduleData);
 
-        return redirect('/admin/schedules')->with('success', 'スケジュールが登録されました！');
+        return redirect('/admin/schedules')->with('success', 'スケジュールが登録されました。');
     }
 
     public function update(Request $request, $scheduleId)
@@ -202,6 +202,6 @@ class ScheduleController extends Controller
         $schedule = Schedule::findOrFail($scheduleId);
         $schedule->delete();
 
-        return redirect('/admin/schedules')->with('success', 'スケジュールが削除されました');
+        return redirect('/admin/schedules')->with('success', 'スケジュールが削除されました。');
     }
 }

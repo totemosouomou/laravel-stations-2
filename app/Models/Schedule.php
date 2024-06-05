@@ -16,6 +16,8 @@ class Schedule extends Model
     ];
 
     protected $dates = [
+        'start_time',
+        'end_time',
         'created_at',
         'updated_at',
     ];
@@ -32,5 +34,10 @@ class Schedule extends Model
     public function movie()
     {
         return $this->belongsTo(Movie::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 }
