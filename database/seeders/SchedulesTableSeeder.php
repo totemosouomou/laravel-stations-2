@@ -24,7 +24,8 @@ class SchedulesTableSeeder extends Seeder
         $now = Carbon::now();
 
         // 今日の終わりの時刻を設定
-        $endOfDay = Carbon::today()->addHours(23)->addMinutes(59);
+        // $endOfDay = Carbon::today()->addHours(23)->addMinutes(59);
+        $endOfDay = Carbon::tomorrow()->endOfDay();
 
         // 本日の現時刻以降のスケジュールを追加
         // 最初の上映は現時刻から5分後に開始
