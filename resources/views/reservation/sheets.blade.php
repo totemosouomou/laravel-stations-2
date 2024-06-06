@@ -7,14 +7,19 @@
     <style>
         table {
             border-collapse: collapse;
+            width: 100%;
         }
         th, td {
             border: 1px solid black;
             padding: 10px;
+            text-align: center;
         }
         a {
             text-decoration: none;
             color: blue;
+        }
+        .reserved {
+            background-color: gray;
         }
     </style>
 </head>
@@ -38,15 +43,17 @@
             <tr>
                 @for ($j = 1; $j <= 5; $j++)
                     @php
-                        $seat = $sheets->where('row', chr(ord('a') + $i))->where('column', $j)->first();
+                        $row = chr(ord('a') + $i);
+                        $seat = $sheets->where('row', $row)->where('column', $j)->first();
+                        $isReserved = $reservations->where('sheet_id', $seat->id ?? 0)->isNotEmpty();
                     @endphp
-                    <td>
-                        @if ($seat)
-                            <a href="{{ route('user.reservations.create', ['id' => $schedule->movie->id, 'scheduleId' => $schedule->id]) }}?sheetId={{ $seat->id }}&date={{ $schedule->start_time->format('Y-m-d') }}">
+                    <td class="{{ $isReserved ? 'reserved' : '' }}">
+                        @if ($seat && !$isReserved)
+                            <a href="{{ route('user.reservations.create', ['id' => $schedule->movie->id, 'scheduleId' => $schedule->id]) }}?sheetId={{ $seat->id }}&date={{ $date }}">
                                 {{ $seat->row . '-' . $seat->column }}
                             </a>
                         @else
-                            &nbsp;
+                            {{ $seat ? $seat->row . '-' . $seat->column : '&nbsp;' }}
                         @endif
                     </td>
                 @endfor
