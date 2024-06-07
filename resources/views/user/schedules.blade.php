@@ -9,7 +9,7 @@
     <h1>{{ $movie->title }} (Movie_ID: {{ $movie->id }})</h1>
     <p>{{ $movie->published_year }}</p>
     <p>{{ $movie->description }}</p>
-    <!-- <img src="{{ $movie->image_url }}" alt="{{ $movie->title }}"> -->
+    <img src="{{ $movie->image_url }}" alt="{{ $movie->title }}">
 
     <h2>上映スケジュール</h2>
 

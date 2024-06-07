@@ -24,9 +24,8 @@ class CreateReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            'movie_id' => ['required'],
             'schedule_id' => ['required'],
-            'sheet_id' => ['required', 'integer', 'between:1,15'],
+            'sheet_id' => ['required'],
             'name' => ['required'],
             'email' => ['required', 'email:strict,dns'],
             'date' => ['required', 'date_format:Y-m-d']

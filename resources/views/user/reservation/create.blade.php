@@ -32,10 +32,9 @@
 
     <form action="{{ route('user.reservations.store') }}" method="post">
         @csrf
-        <input type="hidden" name="movie_id" value="{{ $movie_id }}">
         <input type="hidden" name="schedule_id" value="{{ $schedule_id }}">
-        <input type="hidden" name="sheet_id" value="{{ $sheet_id }}">
-        <input type="hidden" name="date" value="{{ $date }}">
+        <input type="hidden" name="sheet_id" value="{{ request()->input('sheetId') }}">
+        <input type="hidden" name="date" value="{{ request()->input('date') }}">
 
         <div>
             <label for="name">予約者氏名</label>
@@ -46,10 +45,6 @@
             <label for="email">予約者メールアドレス</label>
             <input type="email" id="email" name="email" value="{{ old('email') }}">
         </div>
-
-        <!-- デバッグ用フォーム要素を追加 -->
-        <!-- <input type="hidden" name="is_canceled" value="0"> -->
-        <!-- <input type="hidden" name="movie_id" value="240"> -->
 
         <button type="submit">予約する</button>
     </form>

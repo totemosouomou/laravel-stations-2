@@ -18,6 +18,14 @@ class Reservation extends Model
         'is_canceled',
     ];
 
+    protected $dates = [
+        'date',
+    ];
+
+    protected $casts = [
+        'date' => 'datetime',
+    ];
+
     public function schedule()
     {
         return $this->belongsTo(Schedule::class);

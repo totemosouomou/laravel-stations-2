@@ -18,8 +18,6 @@ class Schedule extends Model
     protected $dates = [
         'start_time',
         'end_time',
-        'created_at',
-        'updated_at',
     ];
 
     protected $casts = [

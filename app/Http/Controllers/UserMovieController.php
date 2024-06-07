@@ -52,9 +52,9 @@ class UserMovieController extends Controller
     {
         $movie = Movie::with('schedules')->findOrFail($id);
         $schedules = Schedule::with('movie')
-        ->where('movie_id', $movie->id)
-        ->orderBy('start_time', 'asc')
-        ->get();
+            ->where('movie_id', $movie->id)
+            ->orderBy('start_time', 'asc')
+            ->get();
 
         // modelsへ移動
         // foreach ($schedules as $schedule) {

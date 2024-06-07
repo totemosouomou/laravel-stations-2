@@ -49,7 +49,7 @@
                     @endphp
                     <td class="{{ $isReserved ? 'reserved' : '' }}">
                         @if ($seat && !$isReserved)
-                            <a href="{{ route('user.reservations.create', ['id' => $schedule->movie->id, 'scheduleId' => $schedule->id]) }}?sheetId={{ $seat->id }}&date={{ $date }}">
+                            <a href="{{ route('user.reservations.create', ['id' => $schedule->movie->id, 'scheduleId' => $schedule->id]) }}?sheetId={{ $seat->id }}&date={{ request()->query('date') }}">
                                 {{ $seat->row . '-' . $seat->column }}
                             </a>
                         @else
