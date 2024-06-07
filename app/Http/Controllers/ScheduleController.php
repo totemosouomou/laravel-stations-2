@@ -15,11 +15,11 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function admin()
+    public function movies()
     {
         // スケジュールがある映画を取得
         $movies = Movie::has('schedules')->with('schedules')->get();
-        return view('schedule.movie', ['movies' => $movies]);
+        return view('schedule.movies', ['movies' => $movies]);
     }
 
     /**
@@ -193,7 +193,7 @@ class ScheduleController extends Controller
 
         $schedule->update($scheduleData);
 
-        return redirect()->route('admin.schedules.index');
+        return redirect()->route('admin.movies.schedules.index');
     }
 
     public function destroy($scheduleId)

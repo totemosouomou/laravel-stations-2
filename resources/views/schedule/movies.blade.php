@@ -16,7 +16,7 @@
                     <a href="{{ url('/admin/schedules/' . $schedule->id . '/edit') }}">編集</a>
                     <form action="{{ url('/admin/schedules/' . $schedule->id . '/destroy') }}" method="post" style="display:inline;">
                         @csrf
-                        @method('DELETE')
+                        @method('delete')
                         <button type="submit">削除</button>
                     </form>
                 </li>

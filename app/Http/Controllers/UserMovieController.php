@@ -45,7 +45,7 @@ class UserMovieController extends Controller
         $movies = $query->paginate(20);
 
         // ビューに渡す
-        return view('index', ['movies' => $movies]);
+        return view('user.index', ['movies' => $movies]);
     }
 
     public function schedules($id)
@@ -62,13 +62,13 @@ class UserMovieController extends Controller
         //     $schedule->end_time = Carbon::parse($schedule->end_time)->format('H:i');
         // }
 
-        return view('schedules', ['movie' => $movie, 'schedules' => $schedules]);
+        return view('user.schedules', ['movie' => $movie, 'schedules' => $schedules]);
     }
 
     public function sheets()
     {
         $sheets = Sheet::all();
 
-        return view('sheets', ['sheets' => $sheets]);
+        return view('user.sheets', ['sheets' => $sheets]);
     }
 }

@@ -28,10 +28,14 @@
         .selected-seat a {
             color: white;
         }
+        .my-reserved {
+            background-color: green !important;
+            color: white !important;
+        }
     </style>
 </head>
 <body>
-    <h1>予約追加フォーム</h1>
+    <h1>予約編集</h1>
 
     @if ($errors->any())
         <div>
@@ -49,8 +53,9 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.reservations.store') }}" method="post">
+    <form action="{{ route('admin.reservations.update', $reservationId) }}" method="post">
         @csrf
+        @method('patch')
 
         @if($date && $movie_id)
             <input type="text" name="date" value="{{ $date ?? '' }}">
@@ -105,19 +110,14 @@
                                 $seat = $sheets->where('row', $row)->where('column', $j)->first();
                                 $isReserved = $reservations ? $reservations->where('sheet_id', $seat->id ?? 0)->isNotEmpty() : false;
                                 $isSelected = $seat && $seat->id == $sheet_id;
+                                $myReserved = $reservationId && $seat && $myReservation->sheet_id == $seat->id && $isReserved;
                             @endphp
-                            <td class="{{ $isReserved ? 'reserved' : '' }} {{ $isSelected ? 'selected-seat' : '' }}">
-                                @if ($seat && (!$isReserved || !$date || !$movie_id))
-                                    @if($date && $movie_id)
-                                        <a href="{{ route('admin.reservations.create') }}?schedule_id={{ $schedule_id }}&date={{ $date }}&sheet_id={{ $seat->id }}"
+                            <td class="{{ $isReserved ? 'reserved' : '' }} {{ $isSelected ? 'selected-seat' : '' }} {{ $myReserved ? 'my-reserved' : '' }}">
+                                @if ($seat && !$isReserved)
+                                        <a href="{{ route('admin.reservations.edit', $reservationId) }}?schedule_id={{ $schedule_id }}&date={{ $date }}&sheet_id={{ $seat->id }}"
                                             onclick="event.preventDefault(); setSheetId({{ $seat->id }});">
                                             {{ $seat->row . '-' . $seat->column }}
                                         </a>
-                                    @else
-                                        <a href="{{ route('admin.reservations.create') }}?sheet_id={{ $seat->id }}">
-                                            {{ $seat->row . '-' . $seat->column }}
-                                        </a>
-                                    @endif
                                 @else
                                     {{ $seat ? $seat->row . '-' . $seat->column : '&nbsp;' }}
                                 @endif
@@ -130,13 +130,19 @@
 
         <div>
             <label for="name">名前</label>
-            <input type="text" name="name" id="name" value="{{ old('name') }}">
+            <input type="text" name="name" id="name" value="{{ old('name', $myReservation->name) }}">
         </div>
         <div>
             <label for="email">メールアドレス</label>
-            <input type="email" name="email" id="email" value="{{ old('email') }}">
+            <input type="email" name="email" id="email" value="{{ old('email', $myReservation->email) }}">
         </div>
-        <button type="submit">予約追加</button>
+        <button type="submit">更新</button>
+    </form>
+
+    <form method="post" action="{{ route('admin.reservations.destroy', $reservationId) }}">
+        @csrf
+        @method('delete')
+        <button type="submit">削除</button>
     </form>
 
 <script>
@@ -145,10 +151,7 @@ function updateDate() {
     if (selectedScheduleId) {
         var selectedStartTime = document.querySelector('option[value="' + selectedScheduleId + '"]').getAttribute('data-start');
         var selectedDate = selectedStartTime.substring(0, 10); // YYYY-MM-DDの形式の日付を取得
-        var url = '/admin/reservations/create?schedule_id=' + selectedScheduleId + '&date=' + selectedDate;
-        @if(isset($sheet_id))
-            url += '&sheet_id={{ $sheet_id }}';
-        @endif
+        var url = '/admin/reservations/{{ $reservationId }}/edit?schedule_id=' + selectedScheduleId + '&date=' + selectedDate;
         window.location.href = url;
     } else {
         // 選択が解除された場合、日付を空にする
