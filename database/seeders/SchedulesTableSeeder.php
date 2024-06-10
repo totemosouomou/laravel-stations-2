@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Movie;
 use App\Models\Schedule;
+use App\Models\Screen;
 use Carbon\Carbon;
 
 class SchedulesTableSeeder extends Seeder
@@ -20,44 +22,65 @@ class SchedulesTableSeeder extends Seeder
         DB::table('schedules')->delete();
         $id = 1;
 
-        // 現在の時刻を取得
         $now = Carbon::now();
 
-        // 今日の終わりの時刻を設定
-        $startOfStartTime = Carbon::tomorrow()->addHours(8)->addMinutes(30);
-        $endOfStartTime = Carbon::tomorrow()->addHours(22)->addMinutes(00);
+        // いつのスケジュールを登録するか設定する
+        $date = $now->addDays(1)->format('Y-m-d');
 
-        // ABCの館の数
-        $numScreens = 3;
+        // 指定された日付を取得
+        $startOfStartTime = Carbon::parse($date)->startOfDay()->addHours(8)->addMinutes(30);
+        $endOfStartTime = Carbon::parse($date)->startOfDay()->addHours(22)->addMinutes(00);
+
+        // スクリーン数
+        $numScreens = Screen::count();
+
+        // 上映中の映画のIDを取得
+        $is_showingIds = Movie::where('is_showing', 1)->pluck('id')->toArray();
+        $numMovies = count($is_showingIds);
 
         // 各スクリーンに初期レコードを割り当てる
         $endTimes = [];
-        $recentMovieIds = []; // 直近に使用された映画IDを保持する配列
-        $usedMovieIds = []; // 使用済みの映画IDを保持する配列
+        $recentMovieIds = [];
+        $usedMovieIds = [];
 
         for ($screenId = 1; $screenId <= $numScreens; $screenId++) {
-            // ランダムな作品IDを選択し、重複しないようにする
-            do {
-                $movieId = rand(1, 10);
-            } while (in_array($movieId, $usedMovieIds));
-            $usedMovieIds[] = $movieId;
+            // 現在の日付のスケジュールを取得し、空いている時間に追加する
+            $schedules = Schedule::where('screen_id', $screenId)
+                ->whereDate('start_time', $startOfStartTime->format('Y-m-d'))
+                ->orderBy('start_time')
+                ->get();
 
-            $startTime = $startOfStartTime->copy()->addMinutes(rand(5, 30));
-            $endTime = $startTime->copy()->addMinutes(120);
+            if ($schedules->isEmpty()) {
+                // 使用可能な映画IDをランダムに選択し、重複しないようにする
+                do {
+                    $availableMovieIds = array_diff($is_showingIds, $usedMovieIds);
+                    $movieId = $availableMovieIds[array_rand($availableMovieIds)];
+                } while (in_array($movieId, $recentMovieIds));
 
-            DB::table('schedules')->insert([
-                'id' => $id++,
-                'movie_id' => $movieId,
-                'start_time' => $startTime,
-                'end_time' => $endTime,
-                'created_at' => $now,
-                'updated_at' => $now,
-                'screen_id' => $screenId,
-            ]);
+                $usedMovieIds[] = $movieId;
 
-            // 各スクリーンの終了時間と映画IDを保持
-            $endTimes[$screenId] = $endTime;
-            $recentMovieIds[$screenId] = $movieId;
+                $startTime = $startOfStartTime->copy()->addMinutes(rand(15, 30));
+                $endTime = $startTime->copy()->addMinutes(120);
+
+                // スケジュールデータを作成
+                $scheduleData = [
+                    'id' => $id++,
+                    'movie_id' => $movieId,
+                    'screen_id' => $screenId,
+                    'start_time' => $startTime,
+                    'end_time' => $endTime,
+                ];
+
+                // スケジュールを作成
+                Schedule::create($scheduleData);
+
+                // 各スクリーンの終了時間と映画IDを保持
+                $endTimes[$screenId] = $endTime;
+                $recentMovieIds[$screenId] = $movieId;
+            } else {
+                // 既存のスケジュールがある場合は終了時間を取得
+                $endTimes[$screenId] = $schedules->last()->end_time;
+            }
         }
 
         while (true) {
@@ -66,26 +89,29 @@ class SchedulesTableSeeder extends Seeder
             $screenId = key($endTimes);
             $endTime = $endTimes[$screenId];
 
-            // 使用済み映画IDが10件に達した場合にリセット
-            if (count($usedMovieIds) >= 10) {
+            // 使用済み映画IDがすべての上映中映画のIDに達した場合にリセット
+            if (count($usedMovieIds) >= $numMovies) {
                 $usedMovieIds = $recentMovieIds;
             }
 
             // ②: 使用済みの映画IDを除外し、ランダムなmovie_idを選択
             do {
-                $movieId = rand(1, 10);
-            } while (in_array($movieId, $recentMovieIds) || in_array($movieId, $usedMovieIds));
+                $availableMovieIds = array_diff($is_showingIds, $usedMovieIds);
+                $movieId = $availableMovieIds[array_rand($availableMovieIds)];
+            } while (in_array($movieId, $recentMovieIds));
+
             $usedMovieIds[] = $movieId;
 
             // 要件を満たすまで新たにmovie_idを選択
             $attempts = 0;
-            while ($attempts < 10 && Schedule::where('movie_id', $movieId)
+            while ($attempts < $numMovies && Schedule::where('movie_id', $movieId)
                 ->where('start_time', '<=', $endTime)
                 ->where('end_time', '>=', $endTime)
                 ->exists()) {
                 do {
-                    $movieId = rand(1, 10);
-                } while (in_array($movieId, $recentMovieIds) || in_array($movieId, $usedMovieIds));
+                    $availableMovieIds = array_diff($is_showingIds, $usedMovieIds);
+                    $movieId = $availableMovieIds[array_rand($availableMovieIds)];
+                } while (in_array($movieId, $recentMovieIds));
                 $attempts++;
             }
 
@@ -95,28 +121,30 @@ class SchedulesTableSeeder extends Seeder
 
             // 最終上映が22:00を超えないように調整
             if ($nextStartTime < $endOfStartTime) {
-                DB::table('schedules')->insert([
+
+                // スケジュールデータを作成
+                $scheduleData = [
                     'id' => $id++,
                     'movie_id' => $movieId,
+                    'screen_id' => $screenId,
                     'start_time' => $nextStartTime,
                     'end_time' => $nextEndTime,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                    'screen_id' => $screenId,
-                ]);
+                ];
+
+                // スケジュールを作成
+                Schedule::create($scheduleData);
 
                 // 更新された終了時間を保持
                 $endTimes[$screenId] = $nextEndTime;
                 $recentMovieIds[$screenId] = $movieId; // 最近の映画IDを更新
+
+            // 現在のスクリーンがもう上映できない場合は次に進む
             } else {
-                // 現在のスクリーンがもう上映できない場合は次に進む
+                unset($endTimes[$screenId]);
                 $numScreens--;
                 if ($numScreens == 0) {
                     break;
                 }
-
-                // 現在のスクリーンの終了時間を最大にして次に進む
-                unset($endTimes[$screenId]);
             }
         }
     }
