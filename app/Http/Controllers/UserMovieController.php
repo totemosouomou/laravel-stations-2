@@ -67,7 +67,7 @@ class UserMovieController extends Controller
 
     public function sheets()
     {
-        $sheets = Sheet::all();
+        $sheets = Sheet::all()->groupBy('screen_id');
 
         return view('user.sheets', ['sheets' => $sheets]);
     }

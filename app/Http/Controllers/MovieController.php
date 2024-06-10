@@ -17,7 +17,8 @@ class MovieController extends Controller
      */
     public function admin()
     {
-        $movies = Movie::all();
+        $movies = Movie::with('schedules')->get();
+
         return view('admin.movie', ['movies' => $movies]);
     }
 

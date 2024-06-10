@@ -16,8 +16,14 @@ class Sheet extends Model
      */
     protected $fillable = [
         'column',
-        'row'
+        'row',
+        'screen_id',
     ];
+
+    public function screen()
+    {
+        return $this->belongsTo(Screen::class);
+    }
 
     public function reservations()
     {

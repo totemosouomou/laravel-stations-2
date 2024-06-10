@@ -33,9 +33,9 @@ class UserReservationController extends Controller
         }
 
         // スケジュールが指定された映画に関連しているか確認
-        // if (!$schedule || $schedule->movie_id != $id) {
-        //     return response()->json(['error' => 'Bad Request: schedule does not belong to the specified movie'], 400);
-        // }
+        if (!$schedule || $schedule->movie_id != $id) {
+            return response()->json(['error' => 'Bad Request: schedule does not belong to the specified movie'], 400);
+        }
 
         // 指定された日付とスケジュールの予約を取得
         $reservations = Reservation::where('schedule_id', $scheduleId)
@@ -73,9 +73,9 @@ class UserReservationController extends Controller
         }
 
         // スケジュールが指定された映画に関連しているか確認
-        // if (!$schedule || $schedule->movie_id != $id) {
-        //     return response()->json(['error' => 'Bad Request: schedule does not belong to the specified movie'], 400);
-        // }
+        if (!$schedule || $schedule->movie_id != $id) {
+            return response()->json(['error' => 'Bad Request: schedule does not belong to the specified movie'], 400);
+        }
 
         // 既に予約されている場合は400エラーを返す
         $existingReservation = Reservation::where('schedule_id', $scheduleId)
@@ -120,7 +120,7 @@ class UserReservationController extends Controller
 
             $movieId = Schedule::findOrFail($inputs['schedule_id'])->movie_id;
 
-            return redirect()->route('user.movies.schedules', ['id' => $movieId])->with('success', '予約が完了しました');
+            return redirect()->route('user.movies.schedules', ['id' => $movieId])->with('success', '予約が完了しました。');
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Failed to create reservation', ['error' => $e->getMessage(), 'inputs' => $inputs]);

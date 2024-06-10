@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Movie;
+use App\Models\Screen;
 use App\Models\Sheet;
 use App\Models\Schedule;
 
@@ -17,13 +18,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // 映画データをシードする
+        $this->call(MovieTableSeeder::class);
+
+        // スクリーンデータをシードする
+        $this->call(ScreenTableSeeder::class);
+
         // シートデータをシードする
         $this->call(SheetTableSeeder::class);
 
-        // 映画データをシードする
-        Movie::factory(10)->create();
-
-        // スケジュールdデータをシードする
+        // スケジュールデータをシードする
         $this->call(SchedulesTableSeeder::class);
     }
 }

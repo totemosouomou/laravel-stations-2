@@ -24,7 +24,7 @@
             @foreach($schedules as $schedule)
                 <li>
                     <span>{{ $schedule->movie->title }}</span>
-                    <span>開始時間: {{ $schedule->start_time->format('H:i') }}</span> -
+                    <span>開始時間: {{ $schedule->start_time->format('Y-m-d H:i') }}</span> -
                     <span>{{ $schedule->end_time->format('H:i') }}</span>
                     <form action="/movies/{{ $movie->id }}/schedules/{{ $schedule->id }}/sheets" method="get">
                         <input type="hidden" name="date" value="{{ $schedule->start_time->format('Y-m-d') }}">

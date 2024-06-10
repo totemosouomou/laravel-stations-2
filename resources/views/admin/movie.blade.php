@@ -62,6 +62,7 @@
                 <th>上映中かどうか</th>
                 <th>ジャンル</th>
                 <th>概要</th>
+                <th>最終上映日時</th>
                 <th>登録日時</th>
                 <th>更新日時</th>
                 <th>操作</th>
@@ -77,6 +78,13 @@
                     <td>{{ $movie->is_showing ? '上映中' : '上映予定' }}</td>
                     <td>{{ $movie->genre ? $movie->genre->name : '未設定' }}</td>
                     <td>{{ $movie->description }}</td>
+                    <td>
+                        @if ($movie->schedules->isNotEmpty())
+                            {{ $movie->schedules->sortByDesc('start_time')->first()->start_time->format('Y-m-d H:i') }}
+                        @else
+                            なし
+                        @endif
+                    </td>
                     <td>{{ $movie->created_at }}</td>
                     <td>{{ $movie->updated_at }}</td>
                     <td>
@@ -91,5 +99,8 @@
             @endforeach
         </tbody>
     </table>
+    <div>
+        <a href="{{ route('admin.movies.schedules.index') }}">スケジュール一覧</a>
+    </div>
 </body>
 </html>

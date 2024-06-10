@@ -19,9 +19,9 @@
         </div>
     @endif
 
-    @if (session('status'))
+    @if (session('error'))
         <div>
-            {{ session('status') }}
+            {{ session('error') }}
         </div>
     @endif
 
@@ -34,6 +34,7 @@
         @method('patch')
 
         <input type="hidden" id="movie_id" name="movie_id" value="{{ $schedule->movie_id }}">
+        <input type="hidden" id="screen_id" name="screen_id" value="{{ $schedule->screen_id }}">
 
         <label for="start_time_date">開始日:</label>
         <input type="date" id="start_time_date" name="start_time_date" value="{{ $schedule->start_time->format('Y-m-d') }}">

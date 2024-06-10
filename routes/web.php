@@ -5,6 +5,7 @@ use App\Http\Controllers\UserMovieController;
 use App\Http\Controllers\UserReservationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ScreenController;
 use App\Http\Controllers\MovieController;
 
 /*
@@ -46,12 +47,13 @@ Route::patch('/admin/reservations/{reservationId}', [ReservationController::clas
 Route::delete('/admin/reservations/{reservationId}', [ReservationController::class, 'destroy'])->name('admin.reservations.destroy');
 
 // 管理者向けスケジュール関連のルート
-Route::get('/admin/schedules', [ScheduleController::class, 'movies'])->name('admin.movies.schedules.index');
-Route::get('/admin/movies/{id}/schedules/create', [ScheduleController::class, 'create'])->name('admin.movies.schedules.create');
-Route::post('/admin/movies/{id}/schedules/store', [ScheduleController::class, 'store'])->name('admin.movies.schedules.store');
-Route::get('/admin/schedules/{scheduleId}', [ScheduleController::class, 'detail'])->name('admin.schedules.detail');
-Route::get('/admin/schedules/{scheduleId}/edit', [ScheduleController::class, 'edit'])->name('admin.schedules.edit');
-Route::patch('/admin/schedules/{scheduleId}/update', [ScheduleController::class, 'update'])->name('admin.schedules.update');
+Route::get('/admin/schedules', [ScreenController::class, 'movies'])->name('admin.movies.schedules.index');
+Route::get('/admin/schedules/create/{date}', [ScreenController::class, 'auto'])->name('admin.schedules.create.auto');
+Route::get('/admin/movies/{id}/schedules/create', [ScreenController::class, 'create'])->name('admin.movies.schedules.create');
+Route::post('/admin/movies/{id}/schedules/store', [ScreenController::class, 'store'])->name('admin.movies.schedules.store');
+Route::get('/admin/schedules/{scheduleId}', [ScreenController::class, 'detail'])->name('admin.schedules.detail');
+Route::get('/admin/schedules/{scheduleId}/edit', [ScreenController::class, 'edit'])->name('admin.schedules.edit');
+Route::patch('/admin/schedules/{scheduleId}/update', [ScreenController::class, 'update'])->name('admin.schedules.update');
 Route::delete('/admin/schedules/{scheduleId}/destroy', [ScheduleController::class, 'destroy'])->name('admin.schedules.destroy');
 
 Route::get('/', function () {
