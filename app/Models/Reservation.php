@@ -16,6 +16,7 @@ class Reservation extends Model
         'email',
         'name',
         'is_canceled',
+        'user_id',
     ];
 
     protected $dates = [
@@ -34,5 +35,10 @@ class Reservation extends Model
     public function sheet()
     {
         return $this->belongsTo(Sheet::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

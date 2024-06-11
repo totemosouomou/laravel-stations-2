@@ -38,12 +38,11 @@
 
         <div>
             <label for="name">予約者氏名</label>
-            <input type="text" id="name" name="name" value="{{ old('name') }}">
+            <input type="text" id="name" name="name" value="{{ old('name') ?? (auth()->user() ? auth()->user()->name : '') }}">
         </div>
-
         <div>
             <label for="email">予約者メールアドレス</label>
-            <input type="email" id="email" name="email" value="{{ old('email') }}">
+            <input type="email" id="email" name="email" value="{{ old('email') ?? (auth()->user() ? auth()->user()->email : '') }}">
         </div>
 
         <button type="submit">予約する</button>

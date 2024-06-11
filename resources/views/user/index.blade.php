@@ -6,6 +6,39 @@
     <title>映画館</title>
 </head>
 <body>
+
+    @if (Auth::check())
+        <!-- ログインしている場合 -->
+        <div>
+            {{ Auth::user()->name }}
+            <form method="post" action="{{ route('logout') }}">
+                @csrf
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">ログアウト</a>
+            </form>
+            @if (Auth::id() == 1)
+                <a href="{{ route('admin.movies.index') }}">管理者ページ</a>
+            @endif
+        </div>
+        @if ($reservations->isEmpty())
+            <p>予約がありません。</p>
+        @else
+            <p>予約中の情報</p>
+            <ul>
+                @foreach ($reservations as $reservation)
+                    <li>
+                        {{ $reservation->schedule->movie->title }} - {{ $reservation->schedule->start_time }}
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+    @else
+        <!-- ログインしていない場合 -->
+        <div>
+            <a href="{{ route('users.create') }}">会員登録</a>
+            <a href="{{ route('login') }}">ログイン</a>
+        </div>
+    @endif
+
     <h1>映画館</h1>
 
     <!-- 検索フォーム -->

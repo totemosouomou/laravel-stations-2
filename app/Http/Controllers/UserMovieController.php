@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Movie;
 use App\Models\Schedule;
 use App\Models\Sheet;
+use Carbon\Carbon;
 
 class UserMovieController extends Controller
 {
@@ -44,8 +46,16 @@ class UserMovieController extends Controller
         // クエリを実行して映画リストをページネーション
         $movies = $query->paginate(20);
 
+        // 認証中ユーザーが持つ予約を表示
+        $user = Auth::user();
+        $reservations = $user->reservations()->with('schedule.movie')
+            ->join('schedules', 'reservations.schedule_id', '=', 'schedules.id')
+            ->where('schedules.end_time', '>', Carbon::now())
+            ->orderBy('schedules.start_time')
+            ->get();
+
         // ビューに渡す
-        return view('user.index', ['movies' => $movies]);
+        return view('user.index', ['movies' => $movies, 'reservations' => $reservations]);
     }
 
     public function schedules($id)

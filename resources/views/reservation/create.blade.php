@@ -128,6 +128,11 @@
             </tbody>
         </table>
         <div>
+            <label for="search">お名前で検索：</label>
+            <input type="text" id="search" name="search" oninput="searchUsers()">
+            <ul id="searchResults"></ul>
+        </div>
+        <div>
             <label for="name">お名前</label>
             <input type="text" name="name" id="name" value="{{ old('name') }}">
         </div>
@@ -139,35 +144,58 @@
     </form>
 
 <script>
-function updateDate() {
-    var selectedScheduleId = document.getElementById("schedule_id").value;
-    if (selectedScheduleId) {
-        var selectedStartTime = document.querySelector('option[value="' + selectedScheduleId + '"]').getAttribute('data-start');
-        var selectedDate = selectedStartTime.substring(0, 10); // YYYY-MM-DDの形式の日付を取得
-        var url = '/admin/reservations/create?schedule_id=' + selectedScheduleId + '&date=' + selectedDate;
-        @if(isset($sheet_id))
-            url += '&sheet_id={{ $sheet_id }}';
-        @endif
-        window.location.href = url;
-    } else {
-        // 選択が解除された場合、日付を空にする
-        document.getElementById("date").value = "";
-    }
-}
-function setSheetId(sheetId) {
-    // 既に選択されたシートの色を元に戻す
-    const previouslySelected = document.querySelector('td.selected-seat');
-    if (previouslySelected) {
-        previouslySelected.classList.remove('selected-seat');
+    function updateDate() {
+        var selectedScheduleId = document.getElementById("schedule_id").value;
+        if (selectedScheduleId) {
+            var selectedStartTime = document.querySelector('option[value="' + selectedScheduleId + '"]').getAttribute('data-start');
+            var selectedDate = selectedStartTime.substring(0, 10); // YYYY-MM-DDの形式の日付を取得
+            var url = '/admin/reservations/create?schedule_id=' + selectedScheduleId + '&date=' + selectedDate;
+            @if(isset($sheet_id))
+                url += '&sheet_id={{ $sheet_id }}';
+            @endif
+            window.location.href = url;
+        } else {
+            // 選択が解除された場合、日付を空にする
+            document.getElementById("date").value = "";
+        }
     }
 
-    // 現在選択されたシートの色を青色に変える
-    const selectedLink = document.querySelector(`a[href*="sheet_id=${sheetId}"]`);
-    if (selectedLink) {
-        selectedLink.parentElement.classList.add('selected-seat');
-        document.querySelector('input[name="sheet_id"]').value = sheetId;
+    function setSheetId(sheetId) {
+        // 既に選択されたシートの色を元に戻す
+        const previouslySelected = document.querySelector('td.selected-seat');
+        if (previouslySelected) {
+            previouslySelected.classList.remove('selected-seat');
+        }
+
+        // 現在選択されたシートの色を青色に変える
+        const selectedLink = document.querySelector(`a[href*="sheet_id=${sheetId}"]`);
+        if (selectedLink) {
+            selectedLink.parentElement.classList.add('selected-seat');
+            document.querySelector('input[name="sheet_id"]').value = sheetId;
+        }
     }
-}
+
+    function searchUsers() {
+        var name = document.getElementById('search').value;
+        var url = '/search-users?name=' + name;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var resultsList = document.getElementById('searchResults');
+                resultsList.innerHTML = '';
+                data.forEach(user => {
+                    var listItem = document.createElement('li');
+                    listItem.textContent = user.name + ' (' + user.email + ')';
+                    listItem.onclick = function() {
+                        document.getElementById('name').value = user.name;
+                        document.getElementById('email').value = user.email;
+                        resultsList.innerHTML = '';
+                    };
+                    resultsList.appendChild(listItem);
+                });
+            });
+    }
 </script>
 </body>
 </html>
