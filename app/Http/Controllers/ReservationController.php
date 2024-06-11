@@ -24,6 +24,8 @@ class ReservationController extends Controller
             ->whereHas('schedule', function ($query) {
                 $query->where('end_time', '>', Carbon::now());
             })
+            ->join('schedules', 'reservations.schedule_id', '=', 'schedules.id')
+            ->orderBy('schedules.start_time')
             ->get();
 
         return view('reservation.movies', ['reservations' => $reservations]);
@@ -105,6 +107,7 @@ class ReservationController extends Controller
                 'name' => $inputs['name'],
                 'email' => $inputs['email'],
                 'is_canceled' => 0,
+                'user_id' => 1,
             ];
 
             $reservation = Reservation::create($reservationData);

@@ -63,6 +63,7 @@
 
     <div>
         <a href="{{ route('admin.movies.index') }}">映画一覧</a>
+        <a href="{{ route('admin.reservations.index') }}">予約一覧</a>
     </div>
 </body>
 </html>

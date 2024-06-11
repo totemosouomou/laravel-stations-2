@@ -40,7 +40,7 @@
             @foreach($reservations as $reservation)
                 <tr>
                     <td>{{ $reservation->schedule->movie->title }}</td>
-                    <td>{{ strtoupper($reservation->sheet->row).$reservation->sheet->column }}</td>
+                    <td>{{ strtoupper($reservation->schedule->screen->name).$reservation->sheet->column }}</td>
                     <td>{{ $reservation->schedule->start_time }}</td>
                     <td>{{ $reservation->name }}</td>
                     <td>{{ $reservation->email }}</td>
@@ -48,6 +48,10 @@
             @endforeach
         </tbody>
     </table>
-</div>
+
+    <div>
+        <a href="{{ route('admin.movies.index') }}">映画一覧</a>
+        <a href="{{ route('admin.movies.schedules.index') }}">スケジュール一覧</a>
+    </div>
 </body>
 </html>

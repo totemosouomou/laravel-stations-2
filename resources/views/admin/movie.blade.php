@@ -99,8 +99,10 @@
             @endforeach
         </tbody>
     </table>
+
     <div>
         <a href="{{ route('admin.movies.schedules.index') }}">スケジュール一覧</a>
+        <a href="{{ route('admin.reservations.index') }}">予約一覧</a>
     </div>
 </body>
 </html>

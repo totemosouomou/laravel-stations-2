@@ -40,24 +40,24 @@
         </thead>
         <tbody>
             @for ($i = 0; $i < 3; $i++)
-            <tr>
-                @for ($j = 1; $j <= 5; $j++)
-                    @php
-                        $row = chr(ord('a') + $i);
-                        $seat = $sheets->where('row', $row)->where('column', $j)->first();
-                        $isReserved = $reservations->where('sheet_id', $seat->id ?? 0)->isNotEmpty();
-                    @endphp
-                    <td class="{{ $isReserved ? 'reserved' : '' }}">
-                        @if ($seat && !$isReserved)
-                            <a href="{{ route('user.reservations.create', ['id' => $schedule->movie->id, 'scheduleId' => $schedule->id]) }}?sheetId={{ $seat->id }}&date={{ request()->query('date') }}">
-                                {{ $seat->row . '-' . $seat->column }}
-                            </a>
-                        @else
-                            {{ $seat ? $seat->row . '-' . $seat->column : '&nbsp;' }}
-                        @endif
-                    </td>
-                @endfor
-            </tr>
+                <tr>
+                    @for ($j = 1; $j <= 5; $j++)
+                        @php
+                            $seatIndex = $i * 5 + $j;
+                            $seat = $sheets->get($seatIndex - 1);
+                            $isReserved = $reservations->where('sheet_id', $seat->id ?? 0)->isNotEmpty();
+                        @endphp
+                        <td class="{{ $isReserved ? 'reserved' : '' }}">
+                            @if ($seat && !$isReserved)
+                                <a href="{{ route('user.reservations.create', ['id' => $schedule->movie->id, 'scheduleId' => $schedule->id]) }}?sheetId={{ $seat->id }}&date={{ request()->query('date') }}">
+                                    {{ $seatIndex }}
+                                </a>
+                            @else
+                                {{ $seat ? $seatIndex : '&nbsp;' }}
+                            @endif
+                        </td>
+                    @endfor
+                </tr>
             @endfor
         </tbody>
     </table>

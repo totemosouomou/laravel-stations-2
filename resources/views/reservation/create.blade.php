@@ -99,10 +99,10 @@
             <tbody>
                 @for ($i = 0; $i < 3; $i++)
                     <tr>
-                        @for ($j = 1; $j <= 5; $j++)
+                        @for ($j = 0; $j < 5; $j++)
                             @php
-                                $row = chr(ord('a') + $i);
-                                $seat = $sheets->where('row', $row)->where('column', $j)->first();
+                                $seatIndex = $i * 5 + $j;
+                                $seat = $sheets->get($seatIndex);
                                 $isReserved = $reservations ? $reservations->where('sheet_id', $seat->id ?? 0)->isNotEmpty() : false;
                                 $isSelected = $seat && $seat->id == $sheet_id;
                             @endphp
@@ -111,15 +111,15 @@
                                     @if($date && $movie_id)
                                         <a href="{{ route('admin.reservations.create') }}?schedule_id={{ $schedule_id }}&date={{ $date }}&sheet_id={{ $seat->id }}"
                                             onclick="event.preventDefault(); setSheetId({{ $seat->id }});">
-                                            {{ $seat->row . '-' . $seat->column }}
+                                            {{ $seatIndex + 1 }}
                                         </a>
                                     @else
                                         <a href="{{ route('admin.reservations.create') }}?sheet_id={{ $seat->id }}">
-                                            {{ $seat->row . '-' . $seat->column }}
+                                            {{ $seatIndex + 1 }}
                                         </a>
                                     @endif
                                 @else
-                                    {{ $seat ? $seat->row . '-' . $seat->column : '&nbsp;' }}
+                                    {{ $seat ? $seatIndex + 1 : '&nbsp;' }}
                                 @endif
                             </td>
                         @endfor
@@ -127,9 +127,8 @@
                 @endfor
             </tbody>
         </table>
-
         <div>
-            <label for="name">名前</label>
+            <label for="name">お名前</label>
             <input type="text" name="name" id="name" value="{{ old('name') }}">
         </div>
         <div>
