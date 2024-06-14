@@ -67,6 +67,7 @@
     <h2>フォームからスケジュールを設定する</h2>
     <form action="{{ route('admin.movies.schedules.store', ['id' => $movie->id]) }}" method="post">
         @csrf
+        <input type="hidden" name="movie_id" value="{{ $movie->id }}">
 
         <div>
             <label for="screen_id">スクリーン:</label>

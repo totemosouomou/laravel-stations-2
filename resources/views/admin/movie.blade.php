@@ -32,6 +32,20 @@
 <body>
     <h1>Movies</h1>
 
+    @if (Auth::check())
+        <!-- ログインしている場合 -->
+        <div>
+            {{ Auth::user()->name }}
+            <form method="post" action="{{ route('logout') }}">
+                @csrf
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">ログアウト</a>
+            </form>
+            @if (Auth::id() == 1)
+                <a href="{{ route('user.movies.index') }}">一般ページ</a>
+            @endif
+        </div>
+    @endif
+
     @if ($errors->any())
         <div class="alert">
             <ul>

@@ -20,6 +20,22 @@
         @endif
     </div>
 
+    @if ($errors->any())
+        <div>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div>
+            {{ session('error') }}
+        </div>
+    @endif
+
     <form action="{{ route('login') }}" method="post">
         @csrf
         <label for="email">Email:</label>

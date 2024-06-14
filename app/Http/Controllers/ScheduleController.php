@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Carbon\Carbon;
+use App\Http\Requests\CreateScheduleRequest;
+use App\Http\Requests\UpdateScheduleRequest;
 use App\Models\Movie;
 use App\Models\Schedule;
 use App\Models\Screen;
+use Carbon\Carbon;
 
 class ScheduleController extends Controller
 {
@@ -316,40 +317,8 @@ class ScheduleController extends Controller
         return view('schedule.create', ['movie' => $movie, 'date' => $date, 'availableTimeSlots' => $availableTimeSlots, 'screens' => $screens]);
     }
 
-    public function store(Request $request, $id)
+    public function store(CreateScheduleRequest $request, $id)
     {
-        // リクエストに映画IDをマージ
-        $request->merge(['movie_id' => $id]);
-
-        // バリデーション
-        $validator = Validator::make($request->all(), [
-            'movie_id' => 'required|exists:movies,id',
-            'screen_id' => 'required|exists:screens,id',
-            'start_time_date' => 'required|date_format:Y-m-d|before_or_equal:end_time_date',
-            'start_time_time' => 'required|date_format:H:i',
-            'end_time_date' => 'required|date_format:Y-m-d|after_or_equal:start_time_date',
-            'end_time_time' => 'required|date_format:H:i',
-        ], [
-            'movie_id.required' => '映画IDを指定してください。',
-            'movie_id.exists' => '指定された映画IDは存在しません。',
-            'screen_id.required' => 'スクリーンIDを指定してください。',
-            'screen_id.exists' => '指定されたスクリーンIDは存在しません。',
-            'start_time_date.required' => '開始日を指定してください。',
-            'start_time_date.date_format' => '開始日の形式が正しくありません。',
-            'start_time_date.before_or_equal' => '開始日は終了日以前の日付を指定してください。',
-            'start_time_time.required' => '開始時間を指定してください。',
-            'start_time_time.date_format' => '開始時間の形式が正しくありません。',
-            'end_time_date.required' => '終了日を指定してください。',
-            'end_time_date.date_format' => '終了日の形式が正しくありません。',
-            'end_time_date.after_or_equal' => '終了日は開始日以降の日付を指定してください。',
-            'end_time_time.required' => '終了時間を指定してください。',
-            'end_time_time.date_format' => '終了時間の形式が正しくありません。',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         // 時間の比較を行う
         $startTime = new Carbon("{$request->start_time_date} {$request->start_time_time}");
         $endTime = new Carbon("{$request->end_time_date} {$request->end_time_time}");
@@ -435,40 +404,11 @@ class ScheduleController extends Controller
         return view('schedule.edit', ['schedule' => $schedule]);
     }
 
-    public function update(Request $request, $scheduleId)
+    public function update(UpdateScheduleRequest $request, $scheduleId)
     {
         $schedule = Schedule::findOrFail($scheduleId);
         $movieId = $schedule->movie_id;
         $screenId = $schedule->screen_id;
-
-        // バリデーション
-        $validator = Validator::make($request->all(), [
-            'movie_id' => 'required|exists:movies,id',
-            'screen_id' => 'required|exists:screens,id',
-            'start_time_date' => 'required|date_format:Y-m-d|before_or_equal:end_time_date',
-            'start_time_time' => 'required|date_format:H:i',
-            'end_time_date' => 'required|date_format:Y-m-d|after_or_equal:start_time_date',
-            'end_time_time' => 'required|date_format:H:i',
-        ], [
-            'movie_id.required' => '映画IDを指定してください。',
-            'movie_id.exists' => '指定された映画IDは存在しません。',
-            'screen_id.required' => 'スクリーンIDを指定してください。',
-            'screen_id.exists' => '指定されたスクリーンIDは存在しません。',
-            'start_time_date.required' => '開始日を指定してください。',
-            'start_time_date.date_format' => '開始日の形式が正しくありません。',
-            'start_time_date.before_or_equal' => '開始日は終了日以前の日付を指定してください。',
-            'start_time_time.required' => '開始時間を指定してください。',
-            'start_time_time.date_format' => '開始時間の形式が正しくありません。',
-            'end_time_date.required' => '終了日を指定してください。',
-            'end_time_date.date_format' => '終了日の形式が正しくありません。',
-            'end_time_date.after_or_equal' => '終了日は開始日以降の日付を指定してください。',
-            'end_time_time.required' => '終了時間を指定してください。',
-            'end_time_time.date_format' => '終了時間の形式が正しくありません。',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         // 時間の比較を行う
         $startTime = new Carbon("{$request->start_time_date} {$request->start_time_time}");
@@ -504,6 +444,7 @@ class ScheduleController extends Controller
         $conflictingMovieSchedules = Schedule::where('start_time', '<', $end_time)
             ->where('end_time', '>', $start_time)
             ->where('movie_id', $movieId)
+            ->where('id', '!=', $scheduleId)
             ->exists();
 
         if ($conflictingMovieSchedules) {
@@ -512,6 +453,7 @@ class ScheduleController extends Controller
 
         // 同時刻に同スクリーンが他の映画で使用されているかチェック
         $conflictingScreenSchedules = Schedule::where('screen_id', $screenId)
+            ->where('id', '!=', $scheduleId)
             ->where(function ($query) use ($start_time, $end_time) {
                 $query->whereBetween('start_time', [$start_time, $end_time])
                     ->orWhereBetween('end_time', [$start_time, $end_time])
@@ -542,7 +484,7 @@ class ScheduleController extends Controller
             $movie->update(['is_showing' => 1]);
         }
 
-        return redirect()->route('admin.movies.schedules.index');
+        return redirect()->route('admin.movies.schedules.index')->with('success', 'スケジュールが更新されました。');
     }
 
     public function destroy($scheduleId)

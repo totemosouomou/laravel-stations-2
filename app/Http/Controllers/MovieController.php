@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use App\Http\Requests\CreateMovieRequest;
+use App\Http\Requests\UpdateMovieRequest;
 use App\Models\Movie;
 use App\Models\Genre;
 
@@ -69,23 +71,9 @@ class MovieController extends Controller
         return view('admin.edit', ['movie' => $movie]);
     }
 
-    public function store(Request $request)
+    public function store(CreateMovieRequest $request)
     {
         // バリデーション
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|unique:movies',
-            'image_url' => 'required|url',
-            'published_year' => 'required|integer|between:2000,2024',
-            'description' => 'required|string',
-            'is_showing' => 'required|boolean',
-            'genre' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return response()->json(['errors' => $errors], 302);
-        }
-
         $validator = Validator::make($request->all(), [
             'title' => 'max:255',
             'genre' => 'max:255',
@@ -132,7 +120,7 @@ class MovieController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateMovieRequest $request, $id)
     {
         // ジャンル情報を含めて映画を取得
         $movie = Movie::with('genre')->findOrFail($id);
@@ -143,20 +131,6 @@ class MovieController extends Controller
         }
 
         // バリデーション
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|unique:movies,title,' . $id,
-            'image_url' => 'required|url',
-            'published_year' => 'required|integer|between:2000,2024',
-            'description' => 'required|string',
-            'is_showing' => 'required|boolean',
-            'genre' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return response()->json(['errors' => $errors], 302);
-        }
-
         $validator = Validator::make($request->all(), [
             'title' => 'max:255',
             'genre' => 'max:255',

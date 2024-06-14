@@ -48,5 +48,11 @@
 
         <button type="submit">更新</button>
     </form>
+
+    <div>
+        <a href="{{ route('admin.movies.schedules.index') }}">スケジュール一覧</a>
+        <a href="{{ route('admin.schedules.detail', $schedule->id) }}">スケジュール詳細</a>
+    </div>
+
 </body>
 </html>

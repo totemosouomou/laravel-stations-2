@@ -24,13 +24,15 @@ class UpdateMovieRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route('id');
+
         return [
-            'title' => ['required', Rule::unique('movies')->ignore($this->id)],
+            'title' => ['required', 'string', 'unique:movies,title,' . $id,],
             'image_url' => ['required', 'url'],
-            'published_year' => ['required', 'gte:1900'],
-            'description' => ['required'],
+            'published_year' => ['required', 'integer', 'between:2000,2024'],
+            'description' => ['required', 'string'],
             'is_showing' => ['required', 'boolean'],
-            'genre' => ['required'],
+            'genre' => ['required', 'string'],
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Movie;
 use App\Models\Screen;
 use App\Models\Sheet;
 use App\Models\Schedule;
+use App\Models\User;
 
 use Illuminate\Database\Seeder;
 
@@ -29,5 +30,8 @@ class DatabaseSeeder extends Seeder
 
         // スケジュールデータをシードする
         $this->call(SchedulesTableSeeder::class);
+
+        // ユーザーデータをシードする
+        $this->call(UserTableSeeder::class);
     }
 }

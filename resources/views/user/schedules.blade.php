@@ -18,8 +18,10 @@
     @endif
 
     <ul>
-        @if (count($schedules) === 0)
-            <span>本日の上映はありません。</span>
+        @if ($movie->is_showing == 0)
+            <span>上映予定の作品です。スケジュール公開までお待ちください。</span>
+        @elseif (count($schedules) === 0)
+            <span>上映スケジュールはありません。</span>
         @else
             @foreach($schedules as $schedule)
                 <li>

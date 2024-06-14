@@ -2,26 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use App\Http\Requests\CreateUserRequest;
+use App\Models\User;
 
 class UserController extends Controller
 {
-    public function register(Request $request)
+    public function register(CreateUserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -36,7 +26,7 @@ class UserController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('sample');
+            return redirect()->route('user.movies.index');
         }
 
         return redirect()->back()->withErrors(['email' => 'Invalid credentials'])->withInput();

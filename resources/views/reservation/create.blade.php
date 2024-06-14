@@ -143,6 +143,8 @@
         <button type="submit">予約追加</button>
     </form>
 
+    <p><a href="{{ route('admin.reservations.index') }}">予約一覧</a></p>
+
 <script>
     function updateDate() {
         var selectedScheduleId = document.getElementById("schedule_id").value;

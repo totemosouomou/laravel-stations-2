@@ -25,7 +25,7 @@ class SchedulesTableSeeder extends Seeder
         $now = Carbon::now();
 
         // いつのスケジュールを登録するか設定する
-        $date = $now->addDays(1)->format('Y-m-d');
+        $date = $now->addDays(0)->format('Y-m-d');
 
         // 指定された日付を取得
         $startOfStartTime = Carbon::parse($date)->startOfDay()->addHours(8)->addMinutes(30);

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateAdminReservationRequest;
 use App\Http\Requests\UpdateAdminReservationRequest;
 use App\Models\Schedule;
 use App\Models\Sheet;
 use App\Models\Reservation;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class ReservationController extends Controller

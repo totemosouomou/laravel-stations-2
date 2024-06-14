@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Schedule;
 use App\Models\Sheet;
@@ -46,6 +45,11 @@ class UserMovieController extends Controller
         // クエリを実行して映画リストをページネーション
         $movies = $query->paginate(20);
 
+        // 認証されているか確認
+        if (!Auth::check()) {
+            return view('user.index', ['movies' => $movies, 'reservations' => '']);
+        }
+
         // 認証中ユーザーが持つ予約を表示
         $user = Auth::user();
         $reservations = $user->reservations()->with('schedule.movie')
@@ -63,14 +67,9 @@ class UserMovieController extends Controller
         $movie = Movie::with('schedules')->findOrFail($id);
         $schedules = Schedule::with('movie')
             ->where('movie_id', $movie->id)
+            ->where('end_time', '>', Carbon::now())
             ->orderBy('start_time', 'asc')
             ->get();
-
-        // modelsへ移動
-        // foreach ($schedules as $schedule) {
-        //     $schedule->start_time = Carbon::parse($schedule->start_time)->format('H:i');
-        //     $schedule->end_time = Carbon::parse($schedule->end_time)->format('H:i');
-        // }
 
         return view('user.schedules', ['movie' => $movie, 'schedules' => $schedules]);
     }

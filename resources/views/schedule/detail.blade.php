@@ -13,7 +13,10 @@
     <p>作成日時: {{ $schedule->created_at }}</p>
     <p>更新日時: {{ $schedule->updated_at }}</p>
 
-    <p><a href="{{ route('admin.movies.schedules.index') }}">戻る</a></p>
+    <div>
+        <a href="{{ route('admin.movies.schedules.index') }}">スケジュール一覧</a>
+        <a href="{{ route('admin.schedules.edit', $schedule->id) }}">スケジュール編集</a>
+    </div>
 
 </body>
 </html>
