@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
@@ -20,10 +22,16 @@ class ScheduleController extends Controller
     public function movies()
     {
         // スケジュールがある映画を取得
-        $movies = Movie::has('schedules')->with(['schedules' => function($query) {
-            $query->orderBy('start_time', 'asc');
+        $movies = Movie::whereHas('schedules', function($query) {
+            $query->where('end_time', '>=', now());
+        })
+        ->with(['schedules' => function($query) {
+            $query->where('end_time', '>=', now())
+                ->orderBy('start_time', 'asc');
         }])
         ->get();
+
+        // スケジュールを持っていない上映中の映画を取得
 
         // スケジュールを持っていない映画を取得
         $moviesWithoutSchedules = Movie::doesntHave('schedules')->get();
@@ -375,26 +383,36 @@ class ScheduleController extends Controller
             return redirect()->back()->with('error', 'この時間帯にはこのスクリーンで他の映画が上映されています。');
         }
 
-        // スケジュールデータを作成
-        $scheduleData = [
-            'movie_id' => $id,
-            'screen_id' => $request->input('screen_id'),
-            'start_time' => $start_time,
-            'end_time' => $end_time,
-        ];
+        DB::beginTransaction();
 
-        // スケジュールを作成
-        $schedule = Schedule::create($scheduleData);
+        try {
+            // スケジュールデータを作成
+            $scheduleData = [
+                'movie_id' => $id,
+                'screen_id' => $request->input('screen_id'),
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+            ];
 
-        // 映画IDに対応する映画を取得
-        $movie = Movie::findOrFail($id);
+            // スケジュールを登録
+            $schedule = Schedule::create($scheduleData);
 
-        // is_showing が上映予定の場合のみ更新
-        if ($movie->is_showing == 0) {
-            $movie->update(['is_showing' => 1]);
+            // 映画IDに対応する映画を取得
+            $movie = Movie::findOrFail($id);
+
+            // is_showing が上映予定の場合のみ更新
+            if ($movie->is_showing == 0) {
+                $movie->update(['is_showing' => 1]);
+            }
+            DB::commit();
+
+            return redirect('/admin/schedules')->with('success', 'スケジュールが登録されました。');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Failed to create schedule' . $e->getMessage());
+            return redirect()->back()->with('error', 'スケジュールの登録に失敗しました。');
         }
-
-        return redirect('/admin/schedules')->with('success', 'スケジュールが登録されました。');
     }
 
     public function edit($scheduleId)
@@ -468,23 +486,32 @@ class ScheduleController extends Controller
             return redirect()->back()->with('error', 'この時間帯にはこのスクリーンで他の映画が上映されています。');
         }
 
-        // スケジュールデータを更新
-        $scheduleData = [
-            'start_time' => Carbon::parse($startTime),
-            'end_time' => Carbon::parse($endTime),
-        ];
+        DB::beginTransaction();
 
-        $schedule->update($scheduleData);
+        try {
+            $scheduleData = [
+                'start_time' => Carbon::parse($startTime),
+                'end_time' => Carbon::parse($endTime),
+            ];
 
-        // 映画IDに対応する映画を取得
-        $movie = Movie::findOrFail($movieId);
+            $schedule->update($scheduleData);
 
-        // is_showing が上映予定の場合のみ更新
-        if ($movie->is_showing == 0) {
-            $movie->update(['is_showing' => 1]);
+            // 映画IDに対応する映画を取得
+            $movie = Movie::findOrFail($movieId);
+
+            // is_showing が上映予定の場合のみ更新
+            if ($movie->is_showing == 0) {
+                $movie->update(['is_showing' => 1]);
+            }
+            DB::commit();
+
+            return redirect()->route('admin.movies.schedules.index')->with('success', 'スケジュールが更新されました。');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Failed to update schedule' . $e->getMessage());
+            return redirect()->back()->with('error', 'スケジュールの更新に失敗しました。');
         }
-
-        return redirect()->route('admin.movies.schedules.index')->with('success', 'スケジュールが更新されました。');
     }
 
     public function destroy($scheduleId)

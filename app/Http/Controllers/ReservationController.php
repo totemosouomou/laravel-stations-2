@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateAdminReservationRequest;
@@ -99,6 +100,7 @@ class ReservationController extends Controller
         }
 
         DB::beginTransaction();
+
         try {
             $reservationData = [
                 'schedule_id' => $inputs['schedule_id'],
@@ -114,6 +116,7 @@ class ReservationController extends Controller
             DB::commit();
 
             return redirect()->route('admin.reservations.index')->with('success', '予約を作成しました。');
+
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Failed to create reservation', ['error' => $e->getMessage(), 'inputs' => $inputs]);
@@ -192,6 +195,7 @@ class ReservationController extends Controller
         }
 
         DB::beginTransaction();
+
         try {
             $reservationData = [
                 'schedule_id' => $inputs['schedule_id'],
@@ -204,6 +208,7 @@ class ReservationController extends Controller
             DB::commit();
 
             return redirect()->route('admin.reservations.index')->with('success', '予約を編集しました。');
+
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Failed to create reservation', ['error' => $e->getMessage(), 'inputs' => $inputs]);

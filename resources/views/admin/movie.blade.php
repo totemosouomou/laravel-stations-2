@@ -98,6 +98,7 @@
                         @else
                             なし
                         @endif
+                        <a href="{{ route('admin.movies.schedules.create', ['id' => $movie->id]) }}">追加</a>
                     </td>
                     <td>{{ $movie->created_at }}</td>
                     <td>{{ $movie->updated_at }}</td>

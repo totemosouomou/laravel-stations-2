@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -103,7 +104,7 @@ class MovieController extends Controller
                 'genre_id' => $genre->id,
             ];
 
-            // 映画を作成
+            // 映画を登録
             $movie = Movie::create($movieData);
 
             DB::commit();

@@ -20,7 +20,7 @@ class UserMovieController extends Controller
     {
         // クエリパラメータを取得
         $isShowing = $request->query('is_showing');
-        $keyword = $request->query('keyword');
+        $keyword = htmlspecialchars($request->query('keyword'), ENT_QUOTES, 'UTF-8');
 
         // クエリビルダーを初期化
         $query = Movie::query();

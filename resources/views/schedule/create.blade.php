@@ -53,6 +53,7 @@
         @endphp
         <form action="{{ route('admin.movies.schedules.store', ['id' => $movie->id]) }}" method="post">
             @csrf
+            <input type="hidden" name="movie_id" value="{{ $movie->id }}">
             <input type="hidden" name="screen_id" value="{{ $slot['screen_id'] }}">
             <input type="hidden" name="start_time_date" value="{{ $slot['start_time']->format('Y-m-d') }}">
             <input type="hidden" name="start_time_time" value="{{ $slot['start_time']->format('H:i') }}">
